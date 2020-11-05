@@ -1,0 +1,151 @@
+29-09-20
+0) DEFINITION DES TERMES:
+	- THREAD : unit of execution within a process. When a process starts, it is assigned 	memory and resources. Each thread in the process shares that memory and resources.
+	- MUTEX : locks/unlocks a variable's use by one process at a time.
+	- SEMAPHORE : locks/unlocks a variable's use by a selection of processes at a time.
+	https://www.geeksforgeeks.org/mutex-vs-semaphore/
+	for mutex implementation:
+	https://docs.oracle.com/cd/E19683-01/806-6867/sync-12/index.html
+
+1) FONCTIONS AUTORISEES :
+
+POUR ONE
+	- void *memset(void *s, int c, size_t n);
+		fills the first n bytes of the memory area pointed to by s with the constant byte c. Returns pointer to s.
+
+	- malloc
+	- free
+	- write
+
+	- int usleep(useconds_t usec);
+		The usleep() function suspends execution of the calling thread for (at least) usec microseconds.
+		Returns 0 on success, -1 on error
+
+	- int gettimeofday(struct timeval *tv, NULL);
+		Gets.. the time of the day.
+		struct timeval {
+	    time_t      tv_sec;     /* seconds */
+	    suseconds_t tv_usec;    /* microseconds */
+		};
+		Returns 0 for success, or -1 for failure
+
+	- int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
+		
+		Crée un nouveau thread et l'envoie dans la fonction pointée par *start_routine. 
+			*thread = stocke l'ID du thread créé.
+		Returns 0 on success smth else if error.
+
+	- int pthread_detach(pthread_t thread);
+		Marque le thread concerné comme "detached": il n'attendra pas d'être join par d'autres thread pour terminate.
+		Returns 0 on success smth else if error.
+
+	- int pthread_join(pthread_t thread, void **retval);
+		Attend que le thread concerné termine. S'il a déjà terminé, alors pas de souci. S'il est detached par contre ça merde.
+		Returns 0 on success smth else if error.
+
+	- int pthread_mutex_init(pthread_mutex_t *restrict mutex,
+	const pthread_mutexattr_t *restrict attr);
+		Initialise le mutex référencé par mutex avec l'attribu spécifié dans attr. Si attr est NULL, init à default.
+		Returns 0 on success smth else if error.
+
+	- int pthread_mutex_destroy(pthread_mutex_t *mutex);
+		Détruit l'objet référencé par mutex, le "désinitialise".
+		Returns 0 on success smth else if error.
+
+	- int pthread_mutex_lock(pthread_mutex_t *mutex);
+		The mutex object referenced by mutex shall be locked by calling pthread_mutex_lock(). If the mutex is already locked, the calling thread shall block until the mutex becomes available. This operation shall return with the mutex object referenced by mutex in the locked state with the calling thread as its owner.
+		Returns 0 on success smth else if error.
+
+	- int pthread_mutex_unlock(pthread_mutex_t *mutex);
+		Unlocks locked mutex.
+		Returns 0 on success smth else if error.
+
+POUR TWO:
+memset, malloc, free, write, usleep, gettimeofday,
+pthread_create, pthread_detach, pthread_join,
+sem_open, sem_close, sem_post, sem_wait, sem_unlink
+
+POUR THREE:
+memset, malloc, free, write, fork, kill, exit,
+pthread_create, pthread_detach, pthread_join,
+usleep, gettimeofday, waitpid, sem_open, sem_close,
+sem_post, sem_wait, sem_unlink
+
+
+2) ATTENTION:
+	- en c
+	- a la norme
+	- no leaks
+	- no libft
+	- no crash/no undefined behaviour: faire un parsing qui gère les mauvais parametres proprement
+
+
+3) ANALYSE DES EXERCICES:
+	--->>> REGLES GENERALES : 
+		- Pattern :
+			eat > think > sleep > eat...
+			Un philosophe meurt s'il n'y a pas 2 fourchettes dispo lorsqu'il doit manger.
+		- OPTIONS
+			number_of_philosopher
+			time_to_die
+			time_to_eat
+			time_to_sleep 
+			[number_of_time_each_philosophers_must_eat]
+
+		- CE QUE JE COMPRENDS : j'ai un tab d'int fork[nb_of_philosopher].
+								# define AVAIL 		0
+								# define NOT_AVAIL	1
+			Début du programme : je malloc fork à int * nb_of_philosopher.
+								je fais une structure t_philo * dans laquelle je mets tout : 
+									total_philosophers,
+									cur_philosopher,
+									time_to_die,
+									time_to_eat,
+									time_to_sleep,
+									number_of_time_each_philosophers_must_eat,
+									int *f_fork,
+									int *s_fork.
+
+								pthread
+								while (++i < nb_of_philosopher)
+									cur_philo = i
+									*f_fork = fork[i]
+									*s_fork = fork[i+1]
+									lancer chaque philosopher dans leur threads respectifs dans handle_philo
+									y envoyer t_philo *
+								attendre tous les threads;
+
+
+			Fin du programme : Si un philosophe meurt, ou si tous les philosophes ont mangé number_of_time_each_philosophers_must_eat fois (s'il est défini, sinon l'init à -1).
+			Any of the threads in the process calls exit(3), or the main thread performs a return from main(). This causes the termination of all threads in the process.
+			Il me faut comme fonctions :
+					handle_philo
+					
+
+
+	--->>> REGLES SPECIFIQUES :
+
+	- PHILO_ONE: 
+	- PHILO_TWO:
+	- PHILO_THREE:
+
+------------------------------------------------------------------
+
+2-10-20
+
+COMPILE WITH : clang -Wall -Wextra -Werror -lpthread philosopher.c philosopher.h
+
+RESOURCES : 
+https://nrecursions.blogspot.com/2014/08/mutex-tutorial-and-example.html
+https://stackoverflow.com/questions/4989451/mutex-example-tutorial
+
+------------------------------------------------------------------
+
+28-10-20
+
+struct
+	fork
+	int cur;
+	*tab_de_phi
+
+
