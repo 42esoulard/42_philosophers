@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/05 17:34:42 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/09 11:35:40 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,6 @@ int 	free_phi(t_phi *phi)
 {
 	if (phi)
 		free(phi);
-	return (-1);
-}
-
-int 	ft_init_err(char *stra, char *strb, t_phi **phi)
-{
-	if (stra)
-		ft_putstr(2, stra);
-	if (strb)
-	{
-		ft_putstr(2, ": invalid parameter.\n\n");
-		ft_putstr(2, strb);
-		ft_putstr(2, " should be a positive integer.\n");
-	}
-	ft_putstr(2, "\nTry: ./philosopher <number_of_philosopher> ");
-	ft_putstr(2, "<time_to_die> <time_to_eat> <time_to_sleep> ");
-	ft_putstr(2, "[number_of_time_each_philosophers_must_eat]\n");
-	if (phi)
-		return (free_phi(*phi));
 	return (-1);
 }
 
@@ -122,51 +104,44 @@ int		is_dead(t_phi **phi)
 	return (0);
 }
 
+void		go_eat(t_phi *tmp)
+{
+	while (((*tmp->fork)[tmp->fork_a] == NOT_AVAIL
+		|| (*tmp->fork)[tmp->fork_b] == NOT_AVAIL)
+		&& is_dead(&tmp) == 0);
+	if (is_dead(&tmp) == 0)
+	{
+		get_time(&tmp);
+		pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]);
+		(*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
+		action_msg(tmp, "has taken a fork");
+		get_time(&tmp);
+		pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]);
+		(*tmp->fork)[tmp->fork_b] = NOT_AVAIL;
+		action_msg(tmp, "has taken a fork");
+		update_last_meal(&tmp);
+		action_msg(tmp, "is eating");
+		usleep(tmp->t_eat * 1000);
+		(*tmp->fork)[tmp->fork_a] = AVAIL;
+		(*tmp->fork)[tmp->fork_b] = AVAIL;
+		pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_a]);
+		pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_b]);
+	}
+	tmp->status++;
+}
+
 void		*handle_phi(void *phi)
 {
-	// (void)phi;
 	t_phi *tmp;
 
 	tmp = (t_phi *)phi;
-	//printf("in threads phi->cur %d status %d\n", tmp->cur, tmp->status);
 	update_last_meal(&tmp);
 	while (is_dead(&tmp) == 0)
 	{
-		// printf("1 stat %d\n", tmp->status);
 		if (tmp->status == EATS)
-		{
-			//printf("%d in EAT\n", tmp->cur);
-			while (((*tmp->fork)[tmp->fork_a] == NOT_AVAIL
-				|| (*tmp->fork)[tmp->fork_b] == NOT_AVAIL)
-				&& is_dead(&tmp) == 0);
-			// printf("3\n");
-			if (is_dead(&tmp) == 0)
-			{
-				//printf("BEGINNING OF MEAL f_a %d f_b %d\n", tmp->fork_a, tmp->fork_b);
-				get_time(&tmp);
-				pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]);
-				(*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
-				action_msg(tmp, "has taken a fork");
-				get_time(&tmp);
-				pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]);
-				(*tmp->fork)[tmp->fork_b] = NOT_AVAIL;
-				action_msg(tmp, "has taken a fork");
-				update_last_meal(&tmp);
-				action_msg(tmp, "is eating");
-				usleep(tmp->t_eat * 1000);
-				(*tmp->fork)[tmp->fork_a] = AVAIL;
-				(*tmp->fork)[tmp->fork_b] = AVAIL;
-				pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_a]);
-				pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_b]);
-			}
-			tmp->status++;
-			// if ((tmp->time - tmp->last_meal) < (tmp->t_die / 4))
-			// 	usleep(tmp->t_die / 4 * 1000);
-		}
-		// printf("4\n");
+			go_eat(tmp);
 		if (tmp->status == SLEEPS && is_dead(&tmp) == 0)
 		{
-			//printf("%d SLEEPS\n", tmp->cur);
 			action_msg(tmp, "is sleeping");
 			usleep(tmp->t_sleep * 1000);
 			tmp->status++;
@@ -174,27 +149,34 @@ void		*handle_phi(void *phi)
 		if (tmp->status == THINKS && is_dead(&tmp) == 0)
 		{
 			action_msg(tmp, "is thinking");
-			
-			// if ((tmp->time - tmp->last_meal)
-			// < (tmp->t_die / 10))
-			
 			while (((*tmp->fork)[tmp->fork_a] == NOT_AVAIL
 				|| (*tmp->fork)[tmp->fork_b] == NOT_AVAIL)
 				&& is_dead(&tmp) == 0)
 				usleep(10);
-			//get_time(&tmp);
 			if ((tmp->time - tmp->last_meal) < (tmp->t_die))
 				usleep((tmp->t_die - (tmp->time - tmp->last_meal)) / (tmp->total) * 100);
-			// printf("bef\n");
-			// usleep((tmp->t_die - (tmp->time - tmp->last_meal) * 1000)/4);
-			// printf("aft\n");
-				// printf("-----AM STUCK\n");
-				//getchar();
 			tmp->status = EATS;
 		}
-		// printf("5\n");
 	}
 	return (NULL);
+}
+
+int 	launch_threads(int i, t_phi *phi, pthread_t *thread_tab)
+{
+	while (i < phi[0].total)
+	{
+		thread_tab[i] = 0;
+		phi[i].start = phi[0].time;
+		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
+			return (EXIT_FAILURE);
+		usleep(50);
+		i += 2;
+	}
+	i = -1;
+	while (++i < phi[0].total)
+		if (pthread_join(thread_tab[i], NULL))
+			return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av)
@@ -204,63 +186,31 @@ int	main(int ac, char **av)
 	t_phi			*phi;
 	pthread_t		*thread_tab;
 	int				i;
-	int 			fork_nb;
-	long 			start_time;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE)//PARSING
 		return (EXIT_FAILURE);
-	fork_nb = phi[0].total;
-	if (fork_nb == 1)
-		fork_nb++;
-	if (!(fork = malloc(sizeof(int) * fork_nb)))
+	if (!(fork = malloc(sizeof(int) * phi[0].fork_total)))
 		return (EXIT_FAILURE);
-	if (!(mutex = malloc(sizeof(pthread_mutex_t) * fork_nb)))
+	if (!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].fork_total)))
 		return (EXIT_FAILURE);
 	if (!(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)))
 		return (EXIT_FAILURE);
 	i = -1;
-	while (++i < fork_nb)
+	while (++i < phi[0].fork_total)
 	{
-		//printf("init fork + mutex %d\n", i);
 		fork[i] = AVAIL;
 		if (pthread_mutex_init(&mutex[i], NULL) != 0)
-			exit (EXIT_FAILURE);
+			return (EXIT_FAILURE);
+		phi[i].fork = &fork;
+	 	phi[i].mutex = &mutex;
 	}
-	i = 0;
 	get_time(&phi);
-	while (i < phi[0].total)
-	{
-		//thread_tab[i] = 0;
-		phi[i].fork = &fork;
-		phi[i].mutex = &mutex;
-		phi[i].start = phi[0].time;
-		//printf("in main phi->cur %d\n", phi[i].cur);
-		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
-			return (EXIT_FAILURE);
-		usleep(50);
-		i += 2;
-	}
-	i = 1;
-	while (i < phi[0].total)
-	{
-		//thread_tab[i] = 0;
-		phi[i].fork = &fork;
-		phi[i].mutex = &mutex;
-		phi[i].start = phi[0].time;
-		//printf("in main phi->cur %d\n", phi[i].cur);
-		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
-			return (EXIT_FAILURE);
-		usleep(50);
-		i += 2;
-	}
-	//printf("after loop\n");
-	i = -1;
-	while (++i < phi[0].total)
-		if (pthread_join(thread_tab[i], NULL))
-			return (EXIT_FAILURE);
-	//printf("after join\n");
+	if (launch_threads(0, phi, thread_tab) == EXIT_FAILURE ||
+		launch_threads(1, phi, thread_tab) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	free(thread_tab);
-	free(fork);
+	free(*(phi[0].fork));
+	free(*(phi[0].mutex));
 	free_phi(phi);
 	return (0);
 }

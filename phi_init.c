@@ -6,14 +6,39 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/05 17:34:25 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/09 11:21:49 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
+int 	ft_init_err(char *stra, char *strb, t_phi **phi)
+{
+	if (stra && ft_putstr(2, stra) < 0)
+		return (EXIT_FAILURE);
+	if (strb)
+	{
+		if (ft_putstr(2, ": invalid parameter.\n\n") < 0)
+			return (EXIT_FAILURE);
+		if (ft_putstr(2, strb) < 0)
+			return (EXIT_FAILURE);
+		if (ft_putstr(2, " should be a positive integer.\n") < 0)
+			return (EXIT_FAILURE);
+	}
+	if (ft_putstr(2, "\nTry: ./philosopher <number_of_philosopher> ") < 0)
+		return (EXIT_FAILURE);
+	if (ft_putstr(2, "<time_to_die> <time_to_eat> <time_to_sleep> ") < 0)
+		return (EXIT_FAILURE);
+	if (ft_putstr(2, "[number_of_time_each_philosophers_must_eat]\n") < 0)
+		return (EXIT_FAILURE);
+	if (phi)
+		return (free_phi(*phi));
+	return (EXIT_FAILURE);
+}
+#include <stdio.h>
 static void	fill_phi(t_phi **phi, int cur, int total)
 {
+	printf("init phi %d\n", cur);
 	(*phi)[cur].cur = cur;
 	(*phi)[cur].status = EATS;
 	if (cur % 2 != 0)
@@ -21,6 +46,9 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 	(*phi)[cur].fork_a = cur;
 	(*phi)[cur].fork_b = cur + 1;
 	(*phi)[cur].total = total;
+	(*phi)[cur].fork_total = total;
+	if (total == 1)
+		((*phi)[cur].fork_total)++;
 	if (cur != 0)
 	{
 		(*phi)[cur].t_eat = (*phi)[0].t_eat;

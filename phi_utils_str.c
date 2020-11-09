@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/01 14:56:25 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/05 18:20:48 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int is_num(char a)
 
 int	ft_putstr(int out, char *str)
 {
-	write(out, str, ft_strlen(str));
+	if (write(out, str, ft_strlen(str)) < 0)
+		return (EXIT_FAILURE);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/03 15:48:02 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/09 11:22:24 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct		s_phi
 	int				**fork;
 	int				fork_a;
 	int				fork_b;
+	int				fork_total;
 	struct timeval	tv;
 	long long		time;
 	long long		start;
@@ -64,5 +65,7 @@ int					ft_putstr(int out, char *str);
 
 char				*ft_itoa(long long n);
 int					ft_atoi(char *str);
+
+int 	free_phi(t_phi *phi);
 
 #endif
