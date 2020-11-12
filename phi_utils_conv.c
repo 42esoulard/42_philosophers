@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:50:42 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/01 19:09:37 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/12 12:04:57 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char		*rev_tab(char *tab)
 {
-	size_t	i;
+	int		i;
 	size_t	j;
 	size_t	len;
 	char	stock;

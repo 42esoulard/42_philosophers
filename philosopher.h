@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/09 11:22:24 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/12 14:23:34 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <stdio.h>
 
 # define PARAM_TDIE "<time_to_die>"
 # define PARAM_TEAT "<time_to_eat>"
@@ -51,14 +52,23 @@ typedef struct		s_phi
 	struct timeval	tv;
 	long long		time;
 	long long		start;
+	int				tmp;
 }					t_phi;
 
-int					get_time(t_phi **phi);
+int 				g_ret;
 
 int					init_phi(int ac, char **av, t_phi **phi);
 
 int 				ft_init_err(char *stra, char *strb, t_phi **phi);
 
+
+void				*handle_phi(void *phi);
+int 				get_time(t_phi *phi);
+int					go_eat(t_phi **tmp);
+int					update_last_meal(t_phi **phi);
+int					is_dead(t_phi **phi);
+
+int					action_msg(t_phi *phi, char *action);
 int					ft_strlen(char *str);
 int					is_num(char a);
 int					ft_putstr(int out, char *str);
@@ -66,6 +76,10 @@ int					ft_putstr(int out, char *str);
 char				*ft_itoa(long long n);
 int					ft_atoi(char *str);
 
-int 	free_phi(t_phi *phi);
+int					free_strs(char *stra, char *strb, char *strc);
+int					free_phi(t_phi *phi);
+int					free_all(t_phi *phi, pthread_t *thread_tab);
+
+
 
 #endif

@@ -6,39 +6,34 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/09 11:21:49 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/12 14:20:45 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int 	ft_init_err(char *stra, char *strb, t_phi **phi)
+int			ft_init_err(char *stra, char *strb, t_phi **phi)
 {
 	if (stra && ft_putstr(2, stra) < 0)
 		return (EXIT_FAILURE);
 	if (strb)
 	{
-		if (ft_putstr(2, ": invalid parameter.\n\n") < 0)
-			return (EXIT_FAILURE);
-		if (ft_putstr(2, strb) < 0)
-			return (EXIT_FAILURE);
-		if (ft_putstr(2, " should be a positive integer.\n") < 0)
+		if (ft_putstr(2, ": invalid parameter.\n\n") < 0 ||
+			ft_putstr(2, strb) < 0 || ft_putstr(2,
+				" should be a positive integer.\n") < 0)
 			return (EXIT_FAILURE);
 	}
-	if (ft_putstr(2, "\nTry: ./philosopher <number_of_philosopher> ") < 0)
-		return (EXIT_FAILURE);
-	if (ft_putstr(2, "<time_to_die> <time_to_eat> <time_to_sleep> ") < 0)
-		return (EXIT_FAILURE);
-	if (ft_putstr(2, "[number_of_time_each_philosophers_must_eat]\n") < 0)
+	if (ft_putstr(2, "\nTry: ./philosopher <number_of_philosopher> ") < 0
+		|| ft_putstr(2, "<time_to_die> <time_to_eat> <time_to_sleep> ") < 0
+		|| ft_putstr(2, "[number_of_time_each_philosophers_must_eat]\n") < 0)
 		return (EXIT_FAILURE);
 	if (phi)
 		return (free_phi(*phi));
 	return (EXIT_FAILURE);
 }
-#include <stdio.h>
+
 static void	fill_phi(t_phi **phi, int cur, int total)
 {
-	printf("init phi %d\n", cur);
 	(*phi)[cur].cur = cur;
 	(*phi)[cur].status = EATS;
 	if (cur % 2 != 0)
@@ -65,7 +60,6 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 int			init_phi(int ac, char **av, t_phi **phi)
 {
 	int total;
-	int i;
 
 	total = 0;
 	if (ac != 5 && ac != 6)
@@ -80,14 +74,14 @@ int			init_phi(int ac, char **av, t_phi **phi)
 		return (ft_init_err(av[3], PARAM_TEAT, phi));
 	if (((*phi)[0].t_sleep = ft_atoi(av[4])) == -1)
 		return (ft_init_err(av[4], PARAM_TSLEEP, phi));
-	if ((i = -1) == -1 && ac == 6)
+	if (((*phi)[0].tmp = -1) == -1 && ac == 6)
 	{
 		if (((*phi)[0].nb_meals = ft_atoi(av[5])) == -1)
 			return (ft_init_err(av[5], PARAM_NB_MEAL, phi));
 	}
 	else
 		(*phi)[0].nb_meals = -1;
-	while (++i < total)
-		fill_phi(phi, i, total);
+	while (++((*phi)[0].tmp) < total)
+		fill_phi(phi, (*phi)[0].tmp, total);
 	return (EXIT_SUCCESS);
 }
