@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 16:01:27 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/12 16:28:16 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 		//printf(">>> time %lld start  %lld last meal  %lld\n", phi[i].time, phi[i].start, phi[i].last_meal);
 		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
 			return (EXIT_FAILURE);
-		if (usleep(50) < 0)
-			return (EXIT_FAILURE);
-		i += 2;
-		if (i >= phi[0].total && i % 2 == 0)
-			i = 1;
+		// if (usleep(50) < 0)
+		// 	return (EXIT_FAILURE);
+		i++;
+		// i += 2;
+		// if (i >= phi[0].total && i % 2 == 0)
+		// 	i = 1;
 	}
+	
 	//getchar();
 	return (EXIT_SUCCESS);
 }
@@ -43,6 +45,7 @@ int		main(int ac, char **av)
 	t_phi			*phi;
 	pthread_t		*thread_tab;
 	int				i;
+	int j;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
 		!(fork = malloc(sizeof(int) * phi[0].fork_total)) ||
@@ -62,8 +65,16 @@ int		main(int ac, char **av)
 		return (EXIT_FAILURE);
 	i = -1;
 	while (++i < phi[0].total)
+	{
+		printf(">>>>>>>>>>>>HERE %d\n", i);
 		if (pthread_join(thread_tab[i], NULL))
 			return (EXIT_FAILURE);
+		j = -1;
+		while (++j < phi[0].total)
+			if (phi[j].status == DEAD)
+				return (free_all(phi, thread_tab));
+		printf(">>>>>>>>>>>>2HERE\n");
+	}
 	return (free_all(phi, thread_tab));
 }
 

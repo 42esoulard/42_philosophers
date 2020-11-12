@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 15:56:36 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/12 17:21:12 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		get_time(t_phi *phi)
 	if (gettimeofday(&(phi->tv), NULL) < 0)
 		return (EXIT_FAILURE);
 	phi->time = phi->tv.tv_sec * 1000 + phi->tv.tv_usec / 1000;
-	//printf("GETIME IN phi#%d time [%lld]\n", phi->cur, phi->time);
+//	printf("time [%lld]\n", phi->time - phi->start);
 	return (EXIT_SUCCESS);
 }
 
@@ -43,6 +43,7 @@ int		is_dead(t_phi **phi)
 	if (((*phi)->time - (*phi)->last_meal)
 		>= (*phi)->t_die)
 	{
+		(*phi)->status = DEAD;
 		if (action_msg(*phi, "died"))
 			return (EXIT_FAILURE);
 		return (2);
@@ -111,6 +112,9 @@ void	*handle_phi(void *phi)
 			if (action_msg(tmp, "is sleeping") == EXIT_FAILURE &&
 				(g_ret = 1) == 1)
 				return (NULL);
+			if (!is_dead(&tmp) && (tmp->tmp = ((tmp->time + tmp->t_sleep) - tmp->last_meal)) >= tmp->t_die)
+				tmp->t_sleep = (tmp->last_meal + tmp->t_die) - tmp->time;
+			printf("tmp tsleep %ld tmp %d\n", tmp->t_sleep, tmp->tmp);
 			if (usleep(tmp->t_sleep * 1000) < 0 && (g_ret = 1) == 1)
 				return (NULL);
 			tmp->status++;
@@ -122,12 +126,12 @@ void	*handle_phi(void *phi)
 				return (NULL);
 			while (((*tmp->fork)[tmp->fork_a] == NOT_AVAIL
 				|| (*tmp->fork)[tmp->fork_b] == NOT_AVAIL)
-				&& is_dead(&tmp) == 0)
+				&& !is_dead(&tmp))
 			{
 				if (usleep(10) < 0)
 					return (NULL);
 			}
-			if ((tmp->time - tmp->last_meal) < (tmp->t_die) &&
+			if (!is_dead(&tmp) && (tmp->time - tmp->last_meal) < (tmp->t_die) &&
 				usleep((tmp->t_die - (tmp->time - tmp->last_meal))
 					/ (tmp->total) * 100) < 0)
 				return (NULL);
