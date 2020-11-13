@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/09 15:07:02 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 16:33:40 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		free_phi(t_phi *phi)
 {
 	if (phi)
 		free(phi);
-	return (-1);
+	return (EXIT_FAILURE);
 }
 
 int		free_all(t_phi *phi, pthread_t *thread_tab)
