@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/13 16:07:50 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 21:13:58 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		main(int ac, char **av)
 	t_phi			*phi;
 	pthread_t		*thread_tab;
 	int				i;
-	int j;
+	// int j;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
 		!(fork = malloc(sizeof(int) * phi[0].fork_total)) ||
@@ -72,10 +72,10 @@ int		main(int ac, char **av)
 		//printf(">>>>>>>>>>>>HERE %d\n", i);
 		if (pthread_join(thread_tab[i], NULL))
 			return (EXIT_FAILURE);
-		j = -1;
-		while (++j < phi[0].total)
-			if (phi[j].status == DEAD)
-				return (free_all(phi, thread_tab));
+		// j = -1;
+		// while (++j < phi[0].total)
+		// 	if (phi[j].status == DEAD)
+		// 		return (free_all(phi, thread_tab));
 		//printf(">>>>>>>>>>>>2HERE\n");
 	}
 	return (free_all(phi, thread_tab));

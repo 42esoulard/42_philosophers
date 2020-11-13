@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/13 16:18:39 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 21:19:41 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_phi
 	long int		t_eat;//time_to_eat in ms
 	long int		t_sleep;//time_to_sleep in ms
 	int				nb_meals;//nb of meals each phi must eat before stopping. if none, -1
+	int 			ct_meals;//nb of meals eaten;
 	pthread_mutex_t	**mutex;//mutex tab
 	int				**fork;//fork boolean tab
 	int				*end;//0 = not over, 1 = dead phi

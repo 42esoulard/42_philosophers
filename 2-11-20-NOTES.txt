@@ -1,6 +1,6 @@
 [OKOK] >>> ADD PROTECTIONS TO ALL SYSCALLS
 
->>> PASS SPACES BEF AND AFT ARGS
+[OKOK] >>> PASS SPACES BEF AND AFT ARGS
 
 >>> FIX THREAD CLOSURE HANDLING
 
@@ -14,8 +14,7 @@
 
 >>> LIMIT NUMBER OF MEALS
 
->>> PB WITH DEATH 4 310 200 200
-	./a.out 4 "     +       310                       " 200 200
+[OKOK] >>> PB WITH DEATH 4 310 200 200, CHECK IF phi[0].end is allocated and taken in each phi correctly
 
 >>> FIND TESTS
 

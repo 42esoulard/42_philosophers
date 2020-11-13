@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 14:20:45 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 21:20:06 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 	(*phi)[cur].fork_b = cur + 1;
 	(*phi)[cur].total = total;
 	(*phi)[cur].fork_total = total;
+	(*phi)[cur].ct_meals = 0;
 	if (total == 1)
 		((*phi)[cur].fork_total)++;
 	if (cur != 0)
