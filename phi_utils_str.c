@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 14:20:13 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 16:07:43 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	action_msg(t_phi *phi, char *action)
 	char	*to_print;
 	int		len;
 
+	if (*(phi->end) == DEAD)
+		return (0);
 	tmpa = ft_itoa(phi->time - phi->start);
 	tmpb = ft_itoa(phi->cur);
 	if (!(to_print = malloc(sizeof(char) * (ft_strlen(tmpa) +

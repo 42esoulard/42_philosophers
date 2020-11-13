@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:50:42 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 12:04:57 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 16:30:21 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,16 @@ char			*ft_itoa(long long n)
 	return (result);
 }
 
+int is_end(char *str, int *i)
+{
+	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t' || str[*i] == '\n'
+		|| str[*i] == '\v' || str[*i] == '\f' || str[*i] == '\r'))
+		(*i)++;
+	if (str[*i])
+		return (0);
+	return (1);
+}
+
 int	ft_atoi(char *str)
 {
 	long long	res;
@@ -92,13 +102,21 @@ int	ft_atoi(char *str)
 	res = 0;
 	if (!str || !str[0])
 		return (-1);
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
+		|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r'))
+		i++;
+	while (str[i] && str[i] == '+')
+		i++;
+	while (str[i])
 	{
-		if (!is_num(str[i]))
+		if (!is_num(str[i]) && !is_end(str, &i))
 			return (-1);
+		else if (is_end(str, &i))
+			break ;
 		res *= 10;
 		res += str[i] - 48;
+		i++;
 	}
 	return (res);
 }

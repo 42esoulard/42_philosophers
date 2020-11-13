@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/12 14:23:34 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/13 16:18:39 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,26 +36,26 @@
 
 typedef struct		s_phi
 {
-	int				total;
-	int				cur;
-	long long		last_meal;
-	int				status;
-	long int		t_die;
-	long int		t_eat;
-	long int		t_sleep;
-	int				nb_meals;
-	pthread_mutex_t	**mutex;
-	int				**fork;
-	int				fork_a;
-	int				fork_b;
-	int				fork_total;
-	struct timeval	tv;
-	long long		time;
-	long long		start;
-	int				tmp;
+	int				total;//nb of philosophers
+	int				cur;//index of current phi
+	long long		last_meal;//timestamp of cur_phi's last meal 
+	int				status;//EATS, SLEEPS, THINKS or DEAD
+	long int		t_die;//time_to_die in ms
+	long int		t_eat;//time_to_eat in ms
+	long int		t_sleep;//time_to_sleep in ms
+	int				nb_meals;//nb of meals each phi must eat before stopping. if none, -1
+	pthread_mutex_t	**mutex;//mutex tab
+	int				**fork;//fork boolean tab
+	int				*end;//0 = not over, 1 = dead phi
+	int				fork_a;//first fork, = cur
+	int				fork_b;//second fork, = cur + 1 (or 0 if last)
+	int				fork_total;//MUST BE DELETED, ONLY USEFUL IF 1 PHI
+	struct timeval	tv;// to store gettimeofday return
+	long long		time;//last timestamp recorded
+	long long		start;//timestamp of prog start
+	int				tmp;//random counter
 }					t_phi;
 
-int 				g_ret;
 
 int					init_phi(int ac, char **av, t_phi **phi);
 
