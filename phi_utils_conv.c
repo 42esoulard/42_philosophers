@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:50:42 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/13 16:30:21 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/14 12:20:57 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char			*ft_itoa(long long n)
 	return (result);
 }
 
-int is_end(char *str, int *i)
+int				is_end(char *str, int *i)
 {
 	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t' || str[*i] == '\n'
 		|| str[*i] == '\v' || str[*i] == '\f' || str[*i] == '\r'))
@@ -94,10 +94,10 @@ int is_end(char *str, int *i)
 	return (1);
 }
 
-int	ft_atoi(char *str)
+int				ft_atoi(char *str)
 {
 	long long	res;
-	int 		i;
+	int			i;
 
 	res = 0;
 	if (!str || !str[0])
