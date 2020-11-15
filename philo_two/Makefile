@@ -1,5 +1,8 @@
 
-SRCS		= ./sources/phi_food.c
+SRCS		= ./sources/phi_food.c ./sources/phi_init.c \
+			./sources/phi_routine.c ./sources/phi_utils_conv.c \
+			./sources/phi_utils_free.c ./sources/phi_utils_str.c \
+			./sources/philosopher.c
 
 INC_DIR		= ./includes/
 INCLUDES	= ./includes/philosopher.h
@@ -13,19 +16,17 @@ NAME		= philo_one
 
 
 .c.o:		${SRCS} ${INCLUDES}
-			${CC} ${CFLAGS} -I ${LIBFTINC} -I ${INC_DIR} -c $^ -o ${<:.c=.o}
+			${CC} ${CFLAGS} -I ${INC_DIR} -c $^ -o ${<:.c=.o}
 
 all:		${NAME}
 
 ${NAME}:	${OBJS} ${INCLUDES}
-			make -C ./libft
-			${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${LIBFT}
+			${CC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean :
 			rm -f ${OBJS}
 
 fclean :	clean
-			make fclean -C ./libft
 			rm -f ${NAME}
 
 leaks :		${NAME}

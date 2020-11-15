@@ -6,12 +6,11 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 19:21:08 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:37:14 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
-#include <stdio.h>
 
 int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 {
@@ -25,31 +24,6 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 		phi[i].last_meal = phi[0].time;
 		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
 			return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-int		init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
-{
-	int				i;
-	pthread_mutex_t	*wr_mutex;
-
-	*((*phi)[0].end) = 0;
-	*((*phi)[0].wr_check) = AVAIL;
-	if (!(wr_mutex = malloc(sizeof(pthread_mutex_t)))
-		|| pthread_mutex_init(wr_mutex, NULL) != 0)
-		return (EXIT_FAILURE);
-	i = -1;
-	while (++i < (*phi)[0].fork_total)
-	{
-		(*fork)[i] = AVAIL;
-		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
-			return (EXIT_FAILURE);
-		(*phi)[i].fork = fork;
-		(*phi)[i].mutex = mutex;
-		(*phi)[i].end = (*phi)[0].end;
-		(*phi)[i].wr_check = (*phi)[0].wr_check;
-		(*phi)[i].wr_mutex = wr_mutex;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -83,9 +57,4 @@ int		main(int ac, char **av)
 **			Fin du programme : Si un philosophe meurt, ou si tous les
 **			philosophes ont mangé number_of_time_each_philosophers_must_eat fois
 **			(s'il est défini, sinon l'init à -1).
-**			Any of the threads in the process calls exit(3), or the main thread
-**			performs a return from main(). This causes the termination of all
-**			threads in the process.
-**			Il me faut comme fonctions :
-**					handle_philo
 */

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 12:19:01 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:38:03 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ typedef struct		s_phi
 	long int		t_eat;//time_to_eat in ms
 	long int		t_sleep;//time_to_sleep in ms
 	int				nb_meals;//nb of meals each phi must eat before stopping. if none, -1
-	int 			ct_meals;//nb of meals eaten;
+	int				ct_meals;//nb of meals eaten;
 	pthread_mutex_t	**mutex;//mutex tab
+	pthread_mutex_t *wr_mutex;
+	int				*wr_check;
 	int				**fork;//fork boolean tab
 	int				*end;//0 = not over, 1 = dead phi
 	int				fork_a;//first fork, = cur
@@ -59,9 +61,8 @@ typedef struct		s_phi
 
 
 int					init_phi(int ac, char **av, t_phi **phi);
-
+int					init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex);
 int 				ft_init_err(char *stra, char *strb, t_phi **phi);
-
 
 void				*handle_phi(void *phi);
 int 				get_time(t_phi *phi);
@@ -81,7 +82,5 @@ int					ft_atoi(char *str);
 int					free_strs(char *stra, char *strb, char *strc);
 int					free_phi(t_phi *phi);
 int					free_all(t_phi *phi, pthread_t *thread_tab);
-
-
 
 #endif

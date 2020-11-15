@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 12:16:18 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/14 18:03:46 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 long	forecast(t_phi *tmp, long action_time)
 {
-	if ((tmp->tmp = ((tmp->time + action_time) - tmp->last_meal)) >= tmp->t_die)
-		return (tmp->tmp);
+	if (((tmp->time + action_time) - tmp->last_meal) >= tmp->t_die)
+		return (tmp->last_meal + tmp->t_die - tmp->time);
 	return (action_time);
 }
 

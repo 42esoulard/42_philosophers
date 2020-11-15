@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 12:37:54 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/14 19:17:59 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,22 @@ int			action_msg(t_phi *phi, char *action)
 	char	*index;
 	char	*to_print;
 
+	while (*(phi->wr_check) == NOT_AVAIL)
+		if (*(phi->end) == DEAD)
+			return (EXIT_FAILURE);
 	if (*(phi->end) == DEAD)
-		return (0);
+		return (EXIT_FAILURE);
+	if (pthread_mutex_lock((phi->wr_mutex)) != 0)
+		return (EXIT_FAILURE);
+	*(phi->wr_check) = NOT_AVAIL;
 	if (!(time = ft_itoa(phi->time - phi->start)) ||
 		!(index = ft_itoa(phi->cur)) ||
 		!(to_print = phi_strjoin(time, index, action)))
 		return (EXIT_FAILURE);
-	if (ft_putstr(0, to_print))
+	if (*(phi->end) != DEAD && ft_putstr(0, to_print))
+		return (EXIT_FAILURE);
+	*(phi->wr_check) = AVAIL;
+	if (pthread_mutex_unlock((phi->wr_mutex)) != 0)
 		return (EXIT_FAILURE);
 	return (free_strs(time, index, to_print));
 }

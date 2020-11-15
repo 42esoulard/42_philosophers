@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 18:24:44 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:37:23 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,30 @@ int			init_phi(int ac, char **av, t_phi **phi)
 		(*phi)[0].nb_meals = -1;
 	while (++((*phi)[0].tmp) < total)
 		fill_phi(phi, (*phi)[0].tmp, total);
+	return (EXIT_SUCCESS);
+}
+
+int			init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
+{
+	int				i;
+	pthread_mutex_t	*wr_mutex;
+
+	*((*phi)[0].end) = 0;
+	*((*phi)[0].wr_check) = AVAIL;
+	if (!(wr_mutex = malloc(sizeof(pthread_mutex_t)))
+		|| pthread_mutex_init(wr_mutex, NULL) != 0)
+		return (EXIT_FAILURE);
+	i = -1;
+	while (++i < (*phi)[0].fork_total)
+	{
+		(*fork)[i] = AVAIL;
+		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
+			return (EXIT_FAILURE);
+		(*phi)[i].fork = fork;
+		(*phi)[i].mutex = mutex;
+		(*phi)[i].end = (*phi)[0].end;
+		(*phi)[i].wr_check = (*phi)[0].wr_check;
+		(*phi)[i].wr_mutex = wr_mutex;
+	}
 	return (EXIT_SUCCESS);
 }

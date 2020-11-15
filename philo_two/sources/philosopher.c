@@ -6,12 +6,11 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 12:05:10 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:37:14 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
-#include <stdio.h>
 
 int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 {
@@ -29,24 +28,6 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 	return (EXIT_SUCCESS);
 }
 
-int		init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
-{
-	int i;
-
-	*((*phi)[0].end) = 0;
-	i = -1;
-	while (++i < (*phi)[0].fork_total)
-	{
-		(*fork)[i] = AVAIL;
-		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
-			return (EXIT_FAILURE);
-		(*phi)[i].fork = fork;
-		(*phi)[i].mutex = mutex;
-		(*phi)[i].end = (*phi)[0].end;
-	}
-	return (EXIT_SUCCESS);
-}
-
 int		main(int ac, char **av)
 {
 	int				*fork;
@@ -60,7 +41,8 @@ int		main(int ac, char **av)
 		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].fork_total))
 		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
 		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
-		init_tabs(&phi, &fork, &mutex))
+		!(phi[0].wr_check = (int *)malloc(sizeof(int *)))
+		|| init_tabs(&phi, &fork, &mutex))
 		return (EXIT_FAILURE);
 	if (get_time(&phi[0]) || launch_threads(phi, thread_tab))
 		return (EXIT_FAILURE);
@@ -75,9 +57,4 @@ int		main(int ac, char **av)
 **			Fin du programme : Si un philosophe meurt, ou si tous les
 **			philosophes ont mangé number_of_time_each_philosophers_must_eat fois
 **			(s'il est défini, sinon l'init à -1).
-**			Any of the threads in the process calls exit(3), or the main thread
-**			performs a return from main(). This causes the termination of all
-**			threads in the process.
-**			Il me faut comme fonctions :
-**					handle_philo
 */
