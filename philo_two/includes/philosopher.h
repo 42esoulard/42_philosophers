@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/15 17:38:03 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/15 17:47:16 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <stdio.h>
+# include <semaphore.h>
+# include <fcntl.h>
 
 # define PARAM_TDIE "<time_to_die>"
 # define PARAM_TEAT "<time_to_eat>"

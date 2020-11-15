@@ -1,0 +1,22 @@
+>>> -lpthread -lrt or -pthread?
+
+>>> replace all traces of mutex with sem_open, sem_close, sem_post, sem_wait, sem_unlink
+
+>>> SEMAPHORES: https://www.geeksforgeeks.org/use-posix-semaphores-c/
+
+>>> FIND TESTS
+
+MUST WORK 
+(all) 5 800 200 200
+(all) 4 410 200 200
+
+MUST NOT WORK
+(all) 4 310 200 100
+
+>>> /!\ TEST IN VM to make sure CPU usage is ok and it runs the same
+
+>>> CORRECTION TIPS
+Check top to make sure CPU is < 30%
+https://www.notion.so/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4
+
+
