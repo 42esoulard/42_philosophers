@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/15 17:37:14 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 17:26:19 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int		main(int ac, char **av)
 	int				i;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
-		!(fork = malloc(sizeof(int) * phi[0].fork_total)) ||
-		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].fork_total))
+		!(fork = malloc(sizeof(int) * phi[0].total)) ||
+		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].total))
 		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
 		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
 		!(phi[0].wr_check = (int *)malloc(sizeof(int *)))

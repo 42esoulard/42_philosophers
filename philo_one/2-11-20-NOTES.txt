@@ -18,7 +18,9 @@
 
 [OKOK] >>> PB WITH DEATH 4 310 200 200, CHECK IF phi[0].end is allocated and taken in each phi correctly
 
->>> FIND TESTS
+[OKOK] >>> NORM .h
+
+[OKOK] >>> FIND TESTS
 
 MUST WORK 
 (all) 5 800 200 200

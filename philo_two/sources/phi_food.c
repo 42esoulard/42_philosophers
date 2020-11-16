@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 19:21:21 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 19:15:22 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,14 @@ int		update_last_meal(t_phi **phi)
 
 int		grab_forks(t_phi *tmp)
 {
-	if (is_dead(&tmp) || (get_time(tmp) ||
-		pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0))
+	if (is_dead(&tmp) || (get_time(tmp)) ||
+		sem_wait(*(tmp->forks_sem)))
 		return (EXIT_FAILURE);
-	(*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 		return (EXIT_FAILURE);
-	if (is_dead(&tmp) || (get_time(tmp) ||
-		pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]) != 0))
+	if (is_dead(&tmp) || (get_time(tmp)) ||
+		sem_wait(*(tmp->forks_sem)))
 		return (EXIT_FAILURE);
-	(*tmp->fork)[tmp->fork_b] = NOT_AVAIL;
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -39,10 +37,6 @@ int		grab_forks(t_phi *tmp)
 
 int		go_eat(t_phi **tmp)
 {
-	while (((*(*tmp)->fork)[(*tmp)->fork_a] == NOT_AVAIL
-		|| (*(*tmp)->fork)[(*tmp)->fork_b] == NOT_AVAIL))
-		if (is_dead(tmp))
-			break ;
 	if (!is_dead(tmp))
 	{
 		if (grab_forks(*tmp) || update_last_meal(tmp) ||
@@ -50,10 +44,7 @@ int		go_eat(t_phi **tmp)
 			usleep(forecast((*tmp), (*tmp)->t_eat) * 1000) < 0)
 			return (EXIT_FAILURE);
 		++((*tmp)->ct_meals);
-		(*(*tmp)->fork)[(*tmp)->fork_a] = AVAIL;
-		(*(*tmp)->fork)[(*tmp)->fork_b] = AVAIL;
-		if (pthread_mutex_unlock(&(*(*tmp)->mutex)[(*tmp)->fork_a]) != 0 ||
-			pthread_mutex_unlock(&(*(*tmp)->mutex)[(*tmp)->fork_b]) != 0)
+		if (sem_post((*(*tmp)->forks_sem)) || sem_post((*(*tmp)->forks_sem)))
 			return (EXIT_FAILURE);
 	}
 	(*tmp)->status++;

@@ -1,10 +1,13 @@
->>> -lpthread -lrt or -pthread?
+[OKOK] >>> -lpthread -lrt or -pthread? difference ? pthread ! it adds the thread config
 
->>> replace all traces of mutex with sem_open, sem_close, sem_post, sem_wait, sem_unlink
+[OKOK] >>> replace all traces of mutex with sem_open, sem_close, sem_post, sem_wait, sem_unlink
 
->>> SEMAPHORES: https://www.geeksforgeeks.org/use-posix-semaphores-c/
+[OKOK] >>> NORM
 
->>> FIND TESTS
+
+[OKOK] >>> FIND TESTS
+
+[OKOK] >>> NORM .h
 
 MUST WORK 
 (all) 5 800 200 200
@@ -19,4 +22,6 @@ MUST NOT WORK
 Check top to make sure CPU is < 30%
 https://www.notion.so/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4
 
+>>> LINK ON SEMAPHORES: https://www.geeksforgeeks.org/use-posix-semaphores-c/
 
+[OKOK]>>> DO I NEED TO MALLOC SEMS ? NOPE!

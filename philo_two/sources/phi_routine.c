@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/14 18:03:46 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 17:54:42 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,6 @@ int		go_think(t_phi **tmp)
 {
 	if (is_dead(tmp) || action_msg(*tmp, "is thinking"))
 		return (EXIT_FAILURE);
-	while (((*(*tmp)->fork)[(*tmp)->fork_a] == NOT_AVAIL
-		|| (*(*tmp)->fork)[(*tmp)->fork_b] == NOT_AVAIL)
-		&& !is_dead(tmp))
-		if (usleep(10) < 0)
-			return (EXIT_FAILURE);
 	if (is_dead(tmp) || (((*tmp)->time - (*tmp)->last_meal) < ((*tmp)->t_die) &&
 		usleep(((*tmp)->t_die - ((*tmp)->time - (*tmp)->last_meal))
 		/ ((*tmp)->total) * 100) < 0))

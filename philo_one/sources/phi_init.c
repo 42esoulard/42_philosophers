@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 10:40:54 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 17:25:25 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 	(*phi)[cur].fork_a = cur;
 	(*phi)[cur].fork_b = cur + 1;
 	(*phi)[cur].total = total;
-	(*phi)[cur].fork_total = total;
 	(*phi)[cur].ct_meals = 0;
 	if (cur != 0)
 	{
@@ -96,7 +95,7 @@ int			init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
 		|| pthread_mutex_init(wr_mutex, NULL) != 0)
 		return (EXIT_FAILURE);
 	i = -1;
-	while (++i < (*phi)[0].fork_total)
+	while (++i < (*phi)[0].total)
 	{
 		(*fork)[i] = AVAIL;
 		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)

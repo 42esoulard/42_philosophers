@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 10:40:38 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 19:14:33 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 	(*phi)[cur].status = EATS;
 	if (cur % 2 != 0)
 		(*phi)[cur].status = SLEEPS;
-	(*phi)[cur].fork_a = cur;
-	(*phi)[cur].fork_b = cur + 1;
 	(*phi)[cur].total = total;
-	(*phi)[cur].fork_total = total;
 	(*phi)[cur].ct_meals = 0;
 	if (cur != 0)
 	{
@@ -52,8 +49,6 @@ static void	fill_phi(t_phi **phi, int cur, int total)
 	}
 	if (cur + 1 == total && (*phi)[cur].status == EATS)
 		(*phi)[cur].status = THINKS;
-	if (cur + 1 == total)
-		(*phi)[cur].fork_b = 0;
 }
 
 int			init_phi(int ac, char **av, t_phi **phi)
@@ -85,27 +80,23 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int			init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
+int			init_tabs(t_phi **phi, sem_t **forks_sem, sem_t **wr_sem)
 {
 	int				i;
-	pthread_mutex_t	*wr_mutex;
 
-	*((*phi)[0].end) = 0;
-	*((*phi)[0].wr_check) = AVAIL;
-	if (!(wr_mutex = malloc(sizeof(pthread_mutex_t)))
-		|| pthread_mutex_init(wr_mutex, NULL) != 0)
+	sem_unlink("/forks");
+	sem_unlink("/write");
+	if (((*forks_sem = sem_open("/forks", O_CREAT, 0644,
+		(*phi)[0].total)) == SEM_FAILED) || ((*wr_sem =
+		sem_open("/write", O_CREAT, 0644, 1)) == SEM_FAILED))
 		return (EXIT_FAILURE);
+	*((*phi)[0].end) = 0;
 	i = -1;
-	while (++i < (*phi)[0].fork_total)
+	while (++i < (*phi)[0].total)
 	{
-		(*fork)[i] = AVAIL;
-		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
-			return (EXIT_FAILURE);
-		(*phi)[i].fork = fork;
-		(*phi)[i].mutex = mutex;
+		(*phi)[i].forks_sem = forks_sem;
+		(*phi)[i].wr_sem = wr_sem;
 		(*phi)[i].end = (*phi)[0].end;
-		(*phi)[i].wr_check = (*phi)[0].wr_check;
-		(*phi)[i].wr_mutex = wr_mutex;
 	}
 	return (EXIT_SUCCESS);
 }

@@ -29,7 +29,4 @@ clean :
 fclean :	clean
 			rm -f ${NAME}
 
-leaks :		${NAME}
-			valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-reachable=yes ./${NAME}
-
 re :		fclean all
