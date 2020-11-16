@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/15 17:37:23 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/16 10:40:54 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			ft_init_err(char *stra, char *strb, t_phi **phi)
 
 static void	fill_phi(t_phi **phi, int cur, int total)
 {
-	(*phi)[cur].cur = cur;
+	(*phi)[cur].cur = cur + 1;
 	(*phi)[cur].status = EATS;
 	if (cur % 2 != 0)
 		(*phi)[cur].status = SLEEPS;
