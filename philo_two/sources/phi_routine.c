@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 17:54:42 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:42:40 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@ long	forecast(t_phi *tmp, long action_time)
 		return (tmp->last_meal + tmp->t_die - tmp->time);
 	return (action_time);
 }
-
-/*
-** LES FOURCHETTES SONT NUMEROTEES EN DECALE A GAUCHE DE CHAQUE PHILO
-** EX: Phi 7 à à sa gauche la fork7 et a droite la fork8
-** (OU 0 SIL EST LE DERNIER)
-*/
 
 int		get_time(t_phi *phi)
 {

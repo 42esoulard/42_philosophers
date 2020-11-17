@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:17:08 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:46:58 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <signal.h>
-
-#include <stdio.h>
 
 # define PARAM_TDIE "<time_to_die>"
 # define PARAM_TEAT "<time_to_eat>"
@@ -53,14 +51,11 @@ typedef struct		s_phi
 	int				ct_meals;
 	sem_t			**forks_sem;
 	sem_t			**wr_sem;
-	sem_t			**end_sem;
 	struct timeval	tv;
 	long long		time;
 	long long		start;
 	int				tmp;
 }					t_phi;
-
-int					g_end;
 
 int					init_phi(int ac, char **av, t_phi **phi);
 int					init_tabs(t_phi **phi, sem_t **forks_sem, sem_t **wr_sem);

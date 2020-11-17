@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:16:17 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:37:52 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,13 @@ int			action_msg(t_phi *phi, char *action)
 	char	*index;
 	char	*to_print;
 
-	if (g_end == DEAD)
-		return (EXIT_FAILURE);
 	if (sem_wait(*(phi->wr_sem)))
 		return (EXIT_FAILURE);
 	if (!(time = ft_itoa(phi->time - phi->start)) ||
 		!(index = ft_itoa(phi->cur)) ||
 		!(to_print = phi_strjoin(time, index, action)))
 		return (EXIT_FAILURE);
-	// printf("phi %d // g_end = %d [IN ACT MSG]\n", phi->cur, g_end);
-	if (g_end != DEAD && ft_putstr(0, to_print))
+	if (ft_putstr(0, to_print))
 		return (EXIT_FAILURE);
 	if (sem_post(*(phi->wr_sem)))
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:18:12 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:46:29 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ long	forecast(t_phi *tmp, long action_time)
 	return (action_time);
 }
 
-/*
-** LES FOURCHETTES SONT NUMEROTEES EN DECALE A GAUCHE DE CHAQUE PHILO
-** EX: Phi 7 à à sa gauche la fork7 et a droite la fork8
-** (OU 0 SIL EST LE DERNIER)
-*/
-
 int		get_time(t_phi *phi)
 {
 	if (gettimeofday(&(phi->tv), NULL) < 0)
@@ -35,33 +29,19 @@ int		get_time(t_phi *phi)
 
 int		is_dead(t_phi **phi)
 {
-	if (g_end == DEAD)
-		exit (3);
 	if (((*phi)->nb_meals) != -1 &&
 		((*phi)->ct_meals) >= ((*phi)->nb_meals))
-	{
-		// printf("exit 5\n");
-		sem_wait(*((*phi)->wr_sem));
-		exit (0);
-	}
+		exit(EXIT_SUCCESS);
 	if (get_time(*phi) == EXIT_FAILURE)
-	{
-		// printf("exit 6\n");
-		exit (EXIT_FAILURE);
-	}
+		exit(EXIT_FAILURE);
 	if (((*phi)->time - (*phi)->last_meal)
 		>= (*phi)->t_die)
 	{
 		(*phi)->status = DEAD;
-		if (g_end != DEAD && action_msg(*phi, "died"))
-		{
-			// printf("exit 7\n");
-			exit (EXIT_FAILURE);
-		}
+		if (action_msg(*phi, "died"))
+			exit(EXIT_FAILURE);
 		sem_wait(*((*phi)->wr_sem));
-		g_end = DEAD;
-		// printf("phi %d // g_end = %d [IN DEAD]\n", (*phi)->cur, g_end);
-		exit (3);
+		exit(3);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -85,32 +65,19 @@ int		handle_phi(void *phi)
 	tmp = (t_phi *)phi;
 	while (!is_dead(&tmp))
 	{
-		// printf("child i %d handle phi stat %d\n", tmp->cur, tmp->status);
 		if (tmp->status == EATS && !is_dead(&tmp) && go_eat(&tmp))
-		{
-			// printf("exit 1\n");
-			exit (EXIT_FAILURE);
-		}
+			exit(EXIT_FAILURE);
 		if (tmp->status == SLEEPS && !is_dead(&tmp))
 		{
 			if (is_dead(&tmp) || action_msg(tmp, "is sleeping"))
-			{
-				// printf("exit 2\n");
-				exit (EXIT_FAILURE);
-			}
+				exit(EXIT_FAILURE);
 			if (is_dead(&tmp) ||
 				(usleep(forecast(tmp, tmp->t_sleep) * 1000) < 0))
-			{
-				// printf("exit 3\n");
-				exit (EXIT_FAILURE);
-			}
+				exit(EXIT_FAILURE);
 			tmp->status++;
 		}
 		if (tmp->status == THINKS && !is_dead(&tmp) && go_think(&tmp))
-		{
-			// printf("exit 4\n");
-			exit (EXIT_FAILURE);
-		}
+			exit(EXIT_FAILURE);
 	}
-	exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }

@@ -1,14 +1,14 @@
 [OKOK] >>> -lpthread -lrt or -pthread? difference ? 
 		pthread ! it adds the thread config
 
->>> replace all traces of thread with processes
+[OKOK]>>> replace all traces of thread with processes
 
->>> NORM
+[OKOK]>>> NORM
 
 
 [OKOK] >>> FIND TESTS
 
->>> NORM .h
+[OKOK]>>> NORM .h
 
 MUST WORK 
 (all) 5 800 200 200

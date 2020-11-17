@@ -6,25 +6,39 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:12:26 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:46:25 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int		launch_proc(t_phi *phi, int *pid_tab)
+static void	handle_parent(t_phi *phi, int i, int **pid_tab, int pid)
+{
+	int status;
+	int ret;
+
+	(*pid_tab)[i] = pid;
+	if (i + 1 == phi[0].total)
+	{
+		while (waitpid(-1, &status, 0) != -1)
+		{
+			if (WIFEXITED(status))
+				ret = WEXITSTATUS(status);
+			if (ret != 0 && (i = -1) == -1)
+				while (++i < phi[0].total)
+					kill((*pid_tab)[i], SIGINT);
+		}
+	}
+}
+
+int			launch_proc(t_phi *phi, int *pid_tab)
 {
 	int i;
 	int pid;
-	int ret;
-	int status;
 
 	i = -1;
-	ret = EXIT_SUCCESS;
-
 	while (++i < phi[0].total)
 	{
-		// printf("launching i %d\n", i);
 		phi[i].start = phi[0].time;
 		phi[i].last_meal = phi[0].time;
 		if ((pid = fork()) < 0)
@@ -33,42 +47,20 @@ int		launch_proc(t_phi *phi, int *pid_tab)
 			return (EXIT_FAILURE);
 		}
 		else if (pid == 0)
-		{
-			// printf("in child i %d\n", i);
 			handle_phi(&phi[i]);
-		}
 		else
-		{
-			pid_tab[i] = pid;
-			if (i + 1 == phi[0].total)
-			{
-				while (waitpid(-1, &status, 0) != -1)
-				{
-					if (WIFEXITED(status))
-						ret = WEXITSTATUS(status);
-					if (ret != 0)
-					{
-						i = -1;
-						while (++i < phi[0].total)
-						{
-							printf("kill pid %d\n", pid_tab[i]);
-							kill(pid_tab[i], SIGINT);
-						}
-					}
-				}
-			}
-		}
-		usleep(10);
+			handle_parent(phi, i, &pid_tab, pid);
+		if (usleep(10) < 0)
+			return (EXIT_FAILURE);
 	}
-	return (ret);
+	return (0);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_phi			*phi;
 	sem_t			*forks_sem;
 	sem_t			*wr_sem;
-	// sem_t			*end_sem;
 	int				*pid_tab;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||

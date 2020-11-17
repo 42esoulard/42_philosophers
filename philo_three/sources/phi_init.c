@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:13:23 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/17 12:39:11 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,10 @@ int			init_tabs(t_phi **phi, sem_t **forks_sem, sem_t **wr_sem)
 
 	sem_unlink("/forks");
 	sem_unlink("/write");
-	sem_unlink("/end");
 	if (((*forks_sem = sem_open("/forks", O_CREAT, 0644,
 		(*phi)[0].total)) == SEM_FAILED) || ((*wr_sem =
 		sem_open("/write", O_CREAT, 0644, 1)) == SEM_FAILED))
 		return (EXIT_FAILURE);
-	g_end = 0;
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
