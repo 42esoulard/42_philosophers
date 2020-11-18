@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:43:41 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/18 13:39:10 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@ int		update_last_meal(t_phi **phi)
 
 int		grab_forks(t_phi *tmp)
 {
-	if (is_dead(&tmp) || (get_time(tmp)) ||
-		sem_wait(*(tmp->forks_sem)))
+	if (is_dead(&tmp) || sem_wait(*(tmp->forks_sem)))
 		return (EXIT_FAILURE);
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 		return (EXIT_FAILURE);
-	if (is_dead(&tmp) || (get_time(tmp)) ||
+	if (is_dead(&tmp) ||
 		sem_wait(*(tmp->forks_sem)))
 		return (EXIT_FAILURE);
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
@@ -40,7 +39,7 @@ int		go_eat(t_phi **tmp)
 	if (!is_dead(tmp))
 	{
 		if (grab_forks(*tmp) || update_last_meal(tmp) ||
-			action_msg((*tmp), "is eating") ||
+			is_dead(tmp) || action_msg((*tmp), "is eating") ||
 			usleep(forecast((*tmp), (*tmp)->t_eat) * 1000) < 0)
 			return (EXIT_FAILURE);
 		++((*tmp)->ct_meals);

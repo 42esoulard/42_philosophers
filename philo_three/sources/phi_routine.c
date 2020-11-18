@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:46:29 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/18 13:41:32 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int		is_dead(t_phi **phi)
 		(*phi)->status = DEAD;
 		if (action_msg(*phi, "died"))
 			exit(EXIT_FAILURE);
-		sem_wait(*((*phi)->wr_sem));
 		exit(3);
 	}
 	return (EXIT_SUCCESS);
@@ -48,11 +47,7 @@ int		is_dead(t_phi **phi)
 
 int		go_think(t_phi **tmp)
 {
-	if (is_dead(tmp) || action_msg(*tmp, "is thinking"))
-		return (EXIT_FAILURE);
-	if (is_dead(tmp) || (((*tmp)->time - (*tmp)->last_meal) < ((*tmp)->t_die) &&
-		usleep(((*tmp)->t_die - ((*tmp)->time - (*tmp)->last_meal))
-		/ ((*tmp)->total) * 100) < 0))
+	if (action_msg(*tmp, "is thinking"))
 		return (EXIT_FAILURE);
 	(*tmp)->status = EATS;
 	return (EXIT_SUCCESS);
@@ -65,18 +60,21 @@ int		handle_phi(void *phi)
 	tmp = (t_phi *)phi;
 	while (!is_dead(&tmp))
 	{
-		if (tmp->status == EATS && !is_dead(&tmp) && go_eat(&tmp))
-			exit(EXIT_FAILURE);
-		if (tmp->status == SLEEPS && !is_dead(&tmp))
+		if (tmp->status == EATS)
 		{
-			if (is_dead(&tmp) || action_msg(tmp, "is sleeping"))
+			if (go_eat(&tmp))
+				exit(EXIT_FAILURE);
+		}
+		else if (tmp->status == SLEEPS)
+		{
+			if (action_msg(tmp, "is sleeping"))
 				exit(EXIT_FAILURE);
 			if (is_dead(&tmp) ||
 				(usleep(forecast(tmp, tmp->t_sleep) * 1000) < 0))
 				exit(EXIT_FAILURE);
 			tmp->status++;
 		}
-		if (tmp->status == THINKS && !is_dead(&tmp) && go_think(&tmp))
+		else if (tmp->status == THINKS && go_think(&tmp))
 			exit(EXIT_FAILURE);
 	}
 	exit(EXIT_FAILURE);
