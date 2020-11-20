@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 19:26:37 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:05:03 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int					init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 void				*handle_phi(void *phi);
-int					get_time(t_phi *phi);
+long long			get_time(t_phi *phi);
+int					nap_time(t_phi *phi, int duration);
 long				forecast(t_phi *tmp, long action_time);
 int					go_eat(t_phi **tmp);
 int					update_last_meal(t_phi **phi);

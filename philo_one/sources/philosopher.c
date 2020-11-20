@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 17:26:19 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:01:55 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 	}
 	return (EXIT_SUCCESS);
 }
-
+#include <stdio.h>
 int		main(int ac, char **av)
 {
 	int				*fork;
@@ -44,7 +44,7 @@ int		main(int ac, char **av)
 		!(phi[0].wr_check = (int *)malloc(sizeof(int *)))
 		|| init_tabs(&phi, &fork, &mutex))
 		return (EXIT_FAILURE);
-	if (get_time(&phi[0]) || launch_threads(phi, thread_tab))
+	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
 		return (EXIT_FAILURE);
 	i = -1;
 	while (++i < phi[0].total)

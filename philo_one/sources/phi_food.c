@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/18 13:38:50 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:09:36 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		update_last_meal(t_phi **phi)
 {
-	if (get_time(*phi) == EXIT_FAILURE)
+	if (get_time(*phi) < 0)
 		return (EXIT_FAILURE);
 	(*phi)->last_meal = (*phi)->time;
 	return (EXIT_SUCCESS);
@@ -22,8 +22,7 @@ int		update_last_meal(t_phi **phi)
 
 int		grab_forks(t_phi *tmp)
 {
-	if (is_dead(&tmp) ||
-		pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0)
+	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0)
 		return (EXIT_FAILURE);
 	(*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
@@ -39,15 +38,15 @@ int		grab_forks(t_phi *tmp)
 
 int		go_eat(t_phi **tmp)
 {
-	while (((*(*tmp)->fork)[(*tmp)->fork_a] == NOT_AVAIL
-		|| (*(*tmp)->fork)[(*tmp)->fork_b] == NOT_AVAIL))
-		if (is_dead(tmp))
-			break ;
+	// while (((*(*tmp)->fork)[(*tmp)->fork_a] == NOT_AVAIL
+	// 	|| (*(*tmp)->fork)[(*tmp)->fork_b] == NOT_AVAIL))
+	// 	if (is_dead(tmp))
+	// 		break ;
 	if (!is_dead(tmp))
 	{
 		if (grab_forks(*tmp) || update_last_meal(tmp) ||
 			is_dead(tmp) || action_msg((*tmp), "is eating") ||
-			usleep(forecast((*tmp), (*tmp)->t_eat) * 1000) < 0)
+			nap_time(*tmp, forecast((*tmp), (*tmp)->t_eat)))
 			return (EXIT_FAILURE);
 		++((*tmp)->ct_meals);
 		(*(*tmp)->fork)[(*tmp)->fork_a] = AVAIL;
