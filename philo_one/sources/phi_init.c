@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 17:25:25 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:39:59 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,26 +84,22 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int			init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex)
+int			init_tabs(t_phi **phi, pthread_mutex_t **mutex)
 {
 	int				i;
 	pthread_mutex_t	*wr_mutex;
 
 	*((*phi)[0].end) = 0;
-	*((*phi)[0].wr_check) = AVAIL;
 	if (!(wr_mutex = malloc(sizeof(pthread_mutex_t)))
 		|| pthread_mutex_init(wr_mutex, NULL) != 0)
 		return (EXIT_FAILURE);
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
-		(*fork)[i] = AVAIL;
 		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
 			return (EXIT_FAILURE);
-		(*phi)[i].fork = fork;
 		(*phi)[i].mutex = mutex;
 		(*phi)[i].end = (*phi)[0].end;
-		(*phi)[i].wr_check = (*phi)[0].wr_check;
 		(*phi)[i].wr_mutex = wr_mutex;
 	}
 	return (EXIT_SUCCESS);

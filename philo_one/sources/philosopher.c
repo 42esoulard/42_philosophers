@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:01:55 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:41:37 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,19 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 	}
 	return (EXIT_SUCCESS);
 }
-#include <stdio.h>
+
 int		main(int ac, char **av)
 {
-	int				*fork;
 	pthread_mutex_t *mutex;
 	t_phi			*phi;
 	pthread_t		*thread_tab;
 	int				i;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
-		!(fork = malloc(sizeof(int) * phi[0].total)) ||
 		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].total))
 		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
-		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
-		!(phi[0].wr_check = (int *)malloc(sizeof(int *)))
-		|| init_tabs(&phi, &fork, &mutex))
+		!(phi[0].end = (int *)malloc(sizeof(int *)))
+		|| init_tabs(&phi, &mutex))
 		return (EXIT_FAILURE);
 	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
 		return (EXIT_FAILURE);

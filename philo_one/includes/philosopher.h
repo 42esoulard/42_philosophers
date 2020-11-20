@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:05:03 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:40:13 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct		s_phi
 }					t_phi;
 
 int					init_phi(int ac, char **av, t_phi **phi);
-int					init_tabs(t_phi **phi, int **fork, pthread_mutex_t **mutex);
+int					init_tabs(t_phi **phi, pthread_mutex_t **mutex);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 void				*handle_phi(void *phi);
