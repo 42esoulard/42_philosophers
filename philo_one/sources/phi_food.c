@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:37:24 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 19:18:15 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ int		update_last_meal(t_phi **phi)
 
 int		grab_forks(t_phi *tmp)
 {
-	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0)
+	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0
+		|| is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 		return (EXIT_FAILURE);
-	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
-		return (EXIT_FAILURE);
-	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]) != 0)
-		return (EXIT_FAILURE);
-	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
+	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]) != 0
+		|| is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

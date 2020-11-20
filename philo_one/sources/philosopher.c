@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:41:37 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/20 19:19:38 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int		main(int ac, char **av)
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
 		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].total))
-		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
-		!(phi[0].end = (int *)malloc(sizeof(int *)))
+		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total))
+		|| !(phi[0].end = (int *)malloc(sizeof(int *)))
 		|| init_tabs(&phi, &mutex))
 		return (EXIT_FAILURE);
 	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
