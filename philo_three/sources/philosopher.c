@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 12:46:25 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/21 16:14:29 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int			main(int ac, char **av)
 		return (EXIT_FAILURE);
 	if (!(pid_tab = malloc(sizeof(int) * phi[0].total)))
 		return (EXIT_FAILURE);
-	if (get_time(&phi[0]) || launch_proc(phi, pid_tab))
+	if (get_time(&phi[0]) < 0 || launch_proc(phi, pid_tab))
 		return (EXIT_FAILURE);
 	return (free_all(phi, pid_tab));
 }

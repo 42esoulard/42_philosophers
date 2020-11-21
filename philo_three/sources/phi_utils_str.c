@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/17 17:44:22 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/21 16:28:42 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ int			action_msg(t_phi *phi, char *action)
 	char	*index;
 	char	*to_print;
 
+	if (sem_wait(*(phi->wr_sem)))
+		return (EXIT_FAILURE);
 	if (!(time = ft_itoa(phi->time - phi->start)) ||
 		!(index = ft_itoa(phi->cur)) ||
 		!(to_print = phi_strjoin(time, index, action)))
-		return (EXIT_FAILURE);
-	if (sem_wait(*(phi->wr_sem)))
 		return (EXIT_FAILURE);
 	if (ft_putstr(0, to_print))
 		return (EXIT_FAILURE);

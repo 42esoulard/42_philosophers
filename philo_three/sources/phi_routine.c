@@ -6,33 +6,44 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/18 13:41:32 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/21 16:31:53 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-long	forecast(t_phi *tmp, long action_time)
+int			nap_time(t_phi *phi, int duration)
+{
+	time_t timestamp;
+
+	timestamp = get_time(phi);
+	while (get_time(phi) - timestamp < duration)
+		if (usleep(200) < 0)
+			return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+long		forecast(t_phi *tmp, long action_time)
 {
 	if (((tmp->time + action_time) - tmp->last_meal) >= tmp->t_die)
 		return (tmp->last_meal + tmp->t_die - tmp->time);
 	return (action_time);
 }
 
-int		get_time(t_phi *phi)
+long long	get_time(t_phi *phi)
 {
 	if (gettimeofday(&(phi->tv), NULL) < 0)
 		return (EXIT_FAILURE);
 	phi->time = phi->tv.tv_sec * 1000 + phi->tv.tv_usec / 1000;
-	return (EXIT_SUCCESS);
+	return (phi->time);
 }
 
-int		is_dead(t_phi **phi)
+int			is_dead(t_phi **phi)
 {
 	if (((*phi)->nb_meals) != -1 &&
 		((*phi)->ct_meals) >= ((*phi)->nb_meals))
 		exit(EXIT_SUCCESS);
-	if (get_time(*phi) == EXIT_FAILURE)
+	if (get_time(*phi) < 0)
 		exit(EXIT_FAILURE);
 	if (((*phi)->time - (*phi)->last_meal)
 		>= (*phi)->t_die)
@@ -45,15 +56,7 @@ int		is_dead(t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int		go_think(t_phi **tmp)
-{
-	if (action_msg(*tmp, "is thinking"))
-		return (EXIT_FAILURE);
-	(*tmp)->status = EATS;
-	return (EXIT_SUCCESS);
-}
-
-int		handle_phi(void *phi)
+int			handle_phi(void *phi)
 {
 	t_phi *tmp;
 
@@ -65,17 +68,14 @@ int		handle_phi(void *phi)
 			if (go_eat(&tmp))
 				exit(EXIT_FAILURE);
 		}
-		else if (tmp->status == SLEEPS)
+		else
 		{
-			if (action_msg(tmp, "is sleeping"))
+			if (action_msg(tmp, "is sleeping") ||
+				nap_time(phi, forecast(tmp, tmp->t_sleep))
+				|| action_msg(tmp, "is thinking"))
 				exit(EXIT_FAILURE);
-			if (is_dead(&tmp) ||
-				(usleep(forecast(tmp, tmp->t_sleep) * 1000) < 0))
-				exit(EXIT_FAILURE);
-			tmp->status++;
+			tmp->status = EATS;
 		}
-		else if (tmp->status == THINKS && go_think(&tmp))
-			exit(EXIT_FAILURE);
 	}
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:40:13 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/21 13:08:56 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct		s_phi
 {
 	int				total;
 	int				cur;
-	long long		last_meal;
 	int				status;
 	long int		t_die;
 	long int		t_eat;
@@ -47,13 +46,13 @@ typedef struct		s_phi
 	pthread_mutex_t	**mutex;
 	pthread_mutex_t *wr_mutex;
 	int				*wr_check;
-	int				**fork;
 	int				*end;
 	int				fork_a;
 	int				fork_b;
-	struct timeval	tv;
+	long long		last_meal;
 	long long		time;
 	long long		start;
+	struct timeval	tv;
 	int				tmp;
 }					t_phi;
 

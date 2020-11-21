@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 18:40:29 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/21 15:43:50 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,15 @@ int			action_msg(t_phi *phi, char *action)
 	if (!(time = ft_itoa(phi->time - phi->start)) ||
 		!(index = ft_itoa(phi->cur)) ||
 		!(to_print = phi_strjoin(time, index, action)))
+	{
+		pthread_mutex_unlock(phi->wr_mutex);
 		return (EXIT_FAILURE);
+	}
 	if (*(phi->end) != DEAD && ft_putstr(0, to_print))
+	{
+		pthread_mutex_unlock(phi->wr_mutex);
 		return (EXIT_FAILURE);
+	}
 	if (pthread_mutex_unlock((phi->wr_mutex)) != 0)
 		return (EXIT_FAILURE);
 	return (free_strs(time, index, to_print));
