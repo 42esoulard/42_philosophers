@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 13:47:12 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 19:45:37 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@ int		update_last_meal(t_phi **phi)
 
 int		grab_forks(t_phi *tmp)
 {
-	while ((*tmp->fork)[tmp->fork_a] != AVAIL ||
-		(*tmp->fork)[tmp->fork_b] != AVAIL)
-		if (is_dead(&tmp))
-			return (EXIT_FAILURE);
+	// while ((*tmp->fork)[tmp->fork_a] != AVAIL ||
+	// 	(*tmp->fork)[tmp->fork_b] != AVAIL)
+	// 	if (is_dead(&tmp))
+	// 		return (EXIT_FAILURE);
 	if (pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_a]) != 0)
 		return (EXIT_FAILURE);
-	(*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
+	// (*tmp->fork)[tmp->fork_a] = NOT_AVAIL;
 	if (get_time(tmp) < 0 || action_msg(tmp, "has taken a fork")
 		|| pthread_mutex_lock(&(*tmp->mutex)[tmp->fork_b]) != 0)
 	{
 		pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_a]);
 		return (EXIT_FAILURE);
 	}
-	(*tmp->fork)[tmp->fork_b] = NOT_AVAIL;
+	// (*tmp->fork)[tmp->fork_b] = NOT_AVAIL;
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
 	{
 		pthread_mutex_unlock(&(*tmp->mutex)[tmp->fork_a]);
@@ -59,8 +59,8 @@ int		go_eat(t_phi **tmp)
 			nap_time(*tmp, forecast((*tmp), (*tmp)->t_eat)))
 			ret = EXIT_FAILURE;
 		++((*tmp)->ct_meals);
-		(*(*tmp)->fork)[(*tmp)->fork_a] = AVAIL;
-		(*(*tmp)->fork)[(*tmp)->fork_b] = AVAIL;
+		// (*(*tmp)->fork)[(*tmp)->fork_a] = AVAIL;
+		// (*(*tmp)->fork)[(*tmp)->fork_b] = AVAIL;
 		if (pthread_mutex_unlock(&(*(*tmp)->mutex)[(*tmp)->fork_a]) != 0 ||
 			pthread_mutex_unlock(&(*(*tmp)->mutex)[(*tmp)->fork_b]) != 0)
 			return (EXIT_FAILURE);
