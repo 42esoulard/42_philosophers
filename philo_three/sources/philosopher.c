@@ -6,27 +6,42 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 16:14:29 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 17:56:19 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
+int			chk_death(void *phi)
+{
+	t_phi *tmp;
+
+	tmp = (t_phi *)phi;
+	while (tmp->status != DEAD)
+	{
+		usleep(200);
+		if (is_dead(&tmp))
+			break ;
+	}
+	exit(3);
+}
+
 static void	handle_parent(t_phi *phi, int i, int **pid_tab, int pid)
 {
 	int status;
-	int ret;
 
 	(*pid_tab)[i] = pid;
 	if (i + 1 == phi[0].total)
 	{
-		while (waitpid(-1, &status, 0) != -1)
+		while (1)
 		{
-			if (WIFEXITED(status))
-				ret = WEXITSTATUS(status);
-			if (ret != 0 && (i = -1) == -1)
+			if (waitpid(-1, &status, 0) < 0 || ((WIFEXITED(status)
+				|| WIFSIGNALED(status)) && status != 0))
+			{
 				while (++i < phi[0].total)
 					kill((*pid_tab)[i], SIGINT);
+				break ;
+			}
 		}
 	}
 }

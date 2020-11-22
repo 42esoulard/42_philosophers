@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 16:31:53 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 17:56:53 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,12 @@ int			is_dead(t_phi **phi)
 
 int			handle_phi(void *phi)
 {
-	t_phi *tmp;
+	t_phi		*tmp;
+	pthread_t	chk;
 
 	tmp = (t_phi *)phi;
+	if (pthread_create(&chk, NULL, (void*)chk_death, tmp))
+		exit(EXIT_FAILURE);
 	while (!is_dead(&tmp))
 	{
 		if (tmp->status == EATS)

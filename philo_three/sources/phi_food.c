@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 16:28:22 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 17:54:22 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,16 @@ int		grab_forks(t_phi *tmp)
 		return (EXIT_FAILURE);
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork")
 		|| sem_wait(*(tmp->forks_sem)))
+	{
+		sem_post(*(tmp->forks_sem));
 		return (EXIT_FAILURE);
+	}
 	if (is_dead(&tmp) || action_msg(tmp, "has taken a fork"))
+	{
+		sem_post(*(tmp->forks_sem));
+		sem_post(*(tmp->forks_sem));
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 

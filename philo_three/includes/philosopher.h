@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 16:12:21 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 17:56:43 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct		s_phi
 }					t_phi;
 
 int					init_phi(int ac, char **av, t_phi **phi);
-int					init_tabs(t_phi **phi, sem_t **forks_sem, sem_t **wr_sem);
+int					init_tabs(t_phi **phi, sem_t **forks, sem_t **wr);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 int					handle_phi(void *phi);
@@ -68,6 +68,7 @@ long				forecast(t_phi *tmp, long action_time);
 int					go_eat(t_phi **tmp);
 int					update_last_meal(t_phi **phi);
 int					is_dead(t_phi **phi);
+int					chk_death(void *phi);
 
 int					action_msg(t_phi *phi, char *action);
 int					ft_strlen(char *str);

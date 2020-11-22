@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:52:14 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:58:08 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct		s_phi
 {
 	int				total;
 	int				cur;
-	long long		last_meal;
 	int				status;
 	long int		t_die;
 	long int		t_eat;
@@ -52,6 +51,7 @@ typedef struct		s_phi
 	sem_t			**wr_sem;
 	int				*end;
 	struct timeval	tv;
+	long long		last_meal;
 	long long		time;
 	long long		start;
 	int				tmp;
