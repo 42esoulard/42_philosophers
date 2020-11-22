@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 19:25:28 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 19:40:49 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int		launch_threads(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 		phi[i].last_meal = phi[0].time;
 		if (pthread_create(&p_thr[i], NULL, handle_phi, &phi[i]))
 			return (EXIT_FAILURE);
-		pthread_detach(p_thr[i]);
 		if (pthread_create(&c_thr[i], NULL, (void *)chk_death, &phi[i]))
 			return (EXIT_FAILURE);
 	}
@@ -52,6 +51,10 @@ int		join_threads(t_phi *phi, pthread_t *chk_thr, pthread_t *phi_thr)
 	while (++i < phi[0].total)
 		if (pthread_join(chk_thr[i], NULL))
 			return (EXIT_FAILURE);
+	i = -1;
+	while (++i < phi[0].total)
+		if (pthread_join(phi_thr[i], NULL))
+			return (EXIT_FAILURE);	
 	return (free_all(phi, chk_thr, phi_thr));
 }
 
