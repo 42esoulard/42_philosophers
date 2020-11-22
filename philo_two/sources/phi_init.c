@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:45:09 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 20:21:55 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int			init_tabs(t_phi **phi, sem_t **forks, sem_t **fkct, sem_t **wr)
+int			init_tabs(t_phi **phi, sem_t **forks, sem_t **wr)
 {
 	int				i;
 
@@ -89,20 +89,15 @@ int			init_tabs(t_phi **phi, sem_t **forks, sem_t **fkct, sem_t **wr)
 	sem_unlink("/write");
 	if (((*forks = sem_open("/forks", O_CREAT, 0644,
 		(*phi)[0].total)) == SEM_FAILED) || ((*wr =
-		sem_open("/write", O_CREAT, 0644, 1)) == SEM_FAILED)
-		|| ((*fkct = sem_open("/fkct", O_CREAT,
-			0644, 1)) == SEM_FAILED))
+		sem_open("/write", O_CREAT, 0644, 1)) == SEM_FAILED))
 		return (EXIT_FAILURE);
 	*((*phi)[0].end) = 0;
-	*((*phi)[0].forks_ct) = (*phi)[0].total;
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
 		(*phi)[i].forks_sem = forks;
-		(*phi)[i].forks_ct_sem = fkct;
 		(*phi)[i].wr_sem = wr;
 		(*phi)[i].end = (*phi)[0].end;
-		(*phi)[i].forks_ct = (*phi)[0].forks_ct;
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 17:56:19 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 20:14:13 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ int			launch_proc(t_phi *phi, int *pid_tab)
 		phi[i].start = phi[0].time;
 		phi[i].last_meal = phi[0].time;
 		if ((pid = fork()) < 0)
-		{
-			ft_putstr(2, "fork failed\n");
 			return (EXIT_FAILURE);
-		}
 		else if (pid == 0)
 			handle_phi(&phi[i]);
 		else

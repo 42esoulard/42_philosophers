@@ -6,56 +6,75 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:17:22 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 20:25:34 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int		launch_threads(t_phi *phi, pthread_t *thread_tab)
+int		chk_death(void *phi)
 {
-	int i;
+	t_phi *tmp;
+
+	tmp = (t_phi *)phi;
+	while (tmp->status != DEAD)
+	{
+		usleep(1000);
+		if (is_dead(&tmp))
+			break ;
+	}
+	return (0);
+}
+
+int		launch_threads(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
+{
+	int	i;
 
 	i = -1;
 	while (++i < phi[0].total)
 	{
-		thread_tab[i] = 0;
 		phi[i].start = phi[0].time;
 		phi[i].last_meal = phi[0].time;
-		if (pthread_create(&thread_tab[i], NULL, handle_phi, &phi[i]))
+		if (pthread_create(&p_thr[i], NULL, handle_phi, &phi[i]))
+			return (EXIT_FAILURE);
+		if (pthread_create(&c_thr[i], NULL, (void *)chk_death, &phi[i]))
 			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
-int		join_threads(t_phi *phi, pthread_t *thread_tab)
+int		join_threads(t_phi *phi, pthread_t *chk_thr, pthread_t *phi_thr)
 {
 	int i;
 
 	i = -1;
 	while (++i < phi[0].total)
-		if (pthread_join(thread_tab[i], NULL))
+		if (pthread_join(chk_thr[i], NULL))
 			return (EXIT_FAILURE);
-	return (free_all(phi, thread_tab));
+	i = -1;
+	while (++i < phi[0].total)
+		if (pthread_join(phi_thr[i], NULL))
+			return (EXIT_FAILURE);
+	return (free_all(phi, chk_thr, phi_thr));
 }
 
 int		main(int ac, char **av)
 {
 	t_phi			*phi;
-	pthread_t		*thread_tab;
+	pthread_t		*chk_thr;
+	pthread_t		*phi_thr;
 	sem_t			*forks_sem;
-	sem_t			*forks_ct_sem;
 	sem_t			*wr_sem;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
-		!(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
-		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
-		!(phi[0].forks_ct = (int *)malloc(sizeof(int *))) ||
-		init_tabs(&phi, &forks_sem, &forks_ct_sem, &wr_sem))
+		!(chk_thr = malloc(sizeof(pthread_t) * phi[0].total))
+		|| !(phi_thr = malloc(sizeof(pthread_t) * phi[0].total))
+		|| !(phi[0].end = (int *)malloc(sizeof(int *)))
+		|| init_tabs(&phi, &forks_sem, &wr_sem))
 		return (EXIT_FAILURE);
-	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
+	if (get_time(&phi[0]) < 0 || launch_threads(phi, chk_thr, phi_thr))
 		return (EXIT_FAILURE);
-	return (join_threads(phi, thread_tab));
+	return (join_threads(phi, chk_thr, phi_thr));
 }
 
 /*

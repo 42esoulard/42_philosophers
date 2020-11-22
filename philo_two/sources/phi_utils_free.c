@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:34:30 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 20:23:46 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ int		free_phi(t_phi *phi)
 	return (EXIT_FAILURE);
 }
 
-int		free_all(t_phi *phi, pthread_t *thread_tab)
+int		free_all(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 {
-	free(thread_tab);
+	free(p_thr);
+	free(c_thr);
 	sem_close(*(phi[0].forks_sem));
-	sem_close(*(phi[0].forks_ct_sem));
 	sem_close(*(phi[0].wr_sem));
-	free(phi[0].forks_ct);
 	free(phi[0].end);
 	free_phi(phi);
 	return (0);
