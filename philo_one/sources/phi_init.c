@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/20 19:30:46 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 13:44:06 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int			init_tabs(t_phi **phi, pthread_mutex_t **mutex)
+int			init_tabs(t_phi **phi, pthread_mutex_t **mutex, int **fork)
 {
 	int				i;
 	pthread_mutex_t	*wr_mutex;
@@ -99,11 +99,13 @@ int			init_tabs(t_phi **phi, pthread_mutex_t **mutex)
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
+		(*fork)[i] = AVAIL;
 		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
 			return (EXIT_FAILURE);
 		(*phi)[i].mutex = mutex;
 		(*phi)[i].end = (*phi)[0].end;
 		(*phi)[i].wr_mutex = wr_mutex;
+		(*phi)[i].fork = fork;
 	}
 	return (EXIT_SUCCESS);
 }

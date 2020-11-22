@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 13:08:56 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 13:43:33 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_phi
 	int				nb_meals;
 	int				ct_meals;
 	pthread_mutex_t	**mutex;
+	int 			**fork;
 	pthread_mutex_t *wr_mutex;
 	int				*wr_check;
 	int				*end;
@@ -57,7 +58,7 @@ typedef struct		s_phi
 }					t_phi;
 
 int					init_phi(int ac, char **av, t_phi **phi);
-int					init_tabs(t_phi **phi, pthread_mutex_t **mutex);
+int					init_tabs(t_phi **phi, pthread_mutex_t **mutex, int **fork);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 void				*handle_phi(void *phi);

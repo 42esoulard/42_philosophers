@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 15:46:28 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 13:42:46 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 int		main(int ac, char **av)
 {
 	pthread_mutex_t *mutex;
+	int				*fork;
 	t_phi			*phi;
 	pthread_t		*thread_tab;
 	int				i;
@@ -39,7 +40,8 @@ int		main(int ac, char **av)
 		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].total))
 		|| !(thread_tab = malloc(sizeof(pthread_t) * phi[0].total))
 		|| !(phi[0].end = (int *)malloc(sizeof(int *)))
-		|| init_tabs(&phi, &mutex))
+		|| !(fork = malloc(sizeof(int) * phi[0].total))
+		|| init_tabs(&phi, &mutex, &fork))
 		return (EXIT_FAILURE);
 	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 13:15:06 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 13:45:23 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		free_all(t_phi *phi, pthread_t *thread_tab)
 	while (++i < phi[0].total)
 		pthread_mutex_destroy(&((*(phi[0].mutex))[i]));
 	free(*(phi[0].mutex));
+	free(*(phi[0].fork));
 	free(phi[0].end);
 	pthread_mutex_destroy(phi[0].wr_mutex);
 	free(phi[0].wr_mutex);
