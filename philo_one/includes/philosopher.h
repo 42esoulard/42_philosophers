@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 13:43:33 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:52:47 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct		s_phi
 	int				nb_meals;
 	int				ct_meals;
 	pthread_mutex_t	**mutex;
-	int 			**fork;
+	int				**fork;
 	pthread_mutex_t *wr_mutex;
 	int				*wr_check;
 	int				*end;

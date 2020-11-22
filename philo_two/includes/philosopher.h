@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 13:06:36 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:52:14 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct		s_phi
 	int				nb_meals;
 	int				ct_meals;
 	sem_t			**forks_sem;
+	sem_t			**forks_ct_sem;
+	int				*forks_ct;
 	sem_t			**wr_sem;
 	int				*end;
 	struct timeval	tv;
@@ -56,7 +58,7 @@ typedef struct		s_phi
 }					t_phi;
 
 int					init_phi(int ac, char **av, t_phi **phi);
-int					init_tabs(t_phi **phi, sem_t **forks_sem, sem_t **wr_sem);
+int					init_tabs(t_phi **phi, sem_t **fk, sem_t **fct, sem_t **wr);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 void				*handle_phi(void *phi);

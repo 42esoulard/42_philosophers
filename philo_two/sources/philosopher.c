@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 13:02:50 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:17:22 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,34 @@ int		launch_threads(t_phi *phi, pthread_t *thread_tab)
 	return (EXIT_SUCCESS);
 }
 
-int		main(int ac, char **av)
+int		join_threads(t_phi *phi, pthread_t *thread_tab)
 {
-	t_phi			*phi;
-	pthread_t		*thread_tab;
-	int				i;
-	sem_t			*forks_sem;
-	sem_t			*wr_sem;
+	int i;
 
-	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
-		!(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
-		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
-		init_tabs(&phi, &forks_sem, &wr_sem))
-		return (EXIT_FAILURE);
-	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
-		return (EXIT_FAILURE);
 	i = -1;
 	while (++i < phi[0].total)
 		if (pthread_join(thread_tab[i], NULL))
 			return (EXIT_FAILURE);
 	return (free_all(phi, thread_tab));
+}
+
+int		main(int ac, char **av)
+{
+	t_phi			*phi;
+	pthread_t		*thread_tab;
+	sem_t			*forks_sem;
+	sem_t			*forks_ct_sem;
+	sem_t			*wr_sem;
+
+	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
+		!(thread_tab = malloc(sizeof(pthread_t) * phi[0].total)) ||
+		!(phi[0].end = (int *)malloc(sizeof(int *))) ||
+		!(phi[0].forks_ct = (int *)malloc(sizeof(int *))) ||
+		init_tabs(&phi, &forks_sem, &forks_ct_sem, &wr_sem))
+		return (EXIT_FAILURE);
+	if (get_time(&phi[0]) < 0 || launch_threads(phi, thread_tab))
+		return (EXIT_FAILURE);
+	return (join_threads(phi, thread_tab));
 }
 
 /*

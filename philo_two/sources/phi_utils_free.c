@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/16 18:05:18 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:34:30 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int		free_all(t_phi *phi, pthread_t *thread_tab)
 {
 	free(thread_tab);
 	sem_close(*(phi[0].forks_sem));
+	sem_close(*(phi[0].forks_ct_sem));
 	sem_close(*(phi[0].wr_sem));
+	free(phi[0].forks_ct);
 	free(phi[0].end);
 	free_phi(phi);
 	return (0);
