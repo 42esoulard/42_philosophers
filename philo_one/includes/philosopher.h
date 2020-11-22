@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:52:47 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 18:52:38 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int					ft_atoi(char *str);
 
 int					free_strs(char *stra, char *strb, char *strc);
 int					free_phi(t_phi *phi);
-int					free_all(t_phi *phi, pthread_t *thread_tab);
+int					free_all(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr);
 
 #endif
 
