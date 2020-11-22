@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 14:51:45 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:55:31 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		update_last_meal(t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int		double_post(sem_t sema, sem_t semb)
+int		double_post(sem_t *sema, sem_t *semb)
 {
 	sem_post(sema);
 	sem_post(semb);
