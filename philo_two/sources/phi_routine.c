@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 17:55:22 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 17:39:14 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,14 @@ long long	get_time(t_phi *phi)
 
 int			is_dead(t_phi **phi)
 {
+	if (sem_wait((*phi)->eat_sem))
+		return (EXIT_FAILURE);
 	if (*((*phi)->end) == DEAD || (((*phi)->nb_meals) != -1 &&
 		((*phi)->ct_meals) >= ((*phi)->nb_meals)))
+	{
+		sem_post((*phi)->eat_sem);
 		return (2);
+	}
 	if (get_time(*phi) < 0)
 		return (EXIT_FAILURE);
 	if (((*phi)->time - (*phi)->last_meal)
@@ -52,8 +57,11 @@ int			is_dead(t_phi **phi)
 		if (*((*phi)->end) != DEAD && action_msg(*phi, "died"))
 			return (EXIT_FAILURE);
 		*((*phi)->end) = DEAD;
+		sem_post((*phi)->eat_sem);
 		return (2);
 	}
+	if (sem_post((*phi)->eat_sem))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 

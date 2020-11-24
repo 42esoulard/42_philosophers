@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 17:51:31 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 18:27:02 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int		free_phi(t_phi *phi)
 
 int		free_all(t_phi *phi, int *pid_tab)
 {
+	int i;
+
+	i = -1;
+	while (++i < phi[0].total)
+		sem_close(phi[i].eat_sem);
 	sem_close(*(phi[0].forks_sem));
 	sem_close(*(phi[0].wr_sem));
 	free(pid_tab);

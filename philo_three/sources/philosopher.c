@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 20:14:13 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 11:11:53 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,19 @@ int			chk_death(void *phi)
 static void	handle_parent(t_phi *phi, int i, int **pid_tab, int pid)
 {
 	int status;
+	int ret;
 
 	(*pid_tab)[i] = pid;
+	ret = 0;
 	if (i + 1 == phi[0].total)
 	{
-		while (1)
+		while (waitpid(-1, &status, 0) != -1)
 		{
-			if (waitpid(-1, &status, 0) < 0 || ((WIFEXITED(status)
-				|| WIFSIGNALED(status)) && status != 0))
-			{
+			if (WIFEXITED(status) || WIFSIGNALED(status))
+				ret = WEXITSTATUS(status);
+			if (ret != 0 && (i = -1) == -1)
 				while (++i < phi[0].total)
 					kill((*pid_tab)[i], SIGINT);
-				break ;
-			}
 		}
 	}
 }

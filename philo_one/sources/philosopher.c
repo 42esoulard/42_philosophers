@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 19:57:05 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 17:01:15 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,19 @@ int		join_threads(t_phi *phi, pthread_t *chk_thr, pthread_t *phi_thr)
 
 int		main(int ac, char **av)
 {
-	pthread_mutex_t *mutex;
+	pthread_mutex_t *fk_mx;
+	pthread_mutex_t *eat_mx;
 	t_phi			*phi;
 	pthread_t		*chk_thr;
 	pthread_t		*phi_thr;
 
 	if (init_phi(ac, av, &phi) == EXIT_FAILURE ||
-		!(mutex = malloc(sizeof(pthread_mutex_t) * phi[0].total))
+		!(fk_mx = malloc(sizeof(pthread_mutex_t) * phi[0].total))
+		|| !(eat_mx = malloc(sizeof(pthread_mutex_t) * phi[0].total))
 		|| !(chk_thr = malloc(sizeof(pthread_t) * phi[0].total))
 		|| !(phi_thr = malloc(sizeof(pthread_t) * phi[0].total))
 		|| !(phi[0].end = (int *)malloc(sizeof(int *)))
-		|| init_tabs(&phi, &mutex))
+		|| init_tabs(&phi, &fk_mx, &eat_mx))
 		return (EXIT_FAILURE);
 	if (get_time(&phi[0]) < 0 || launch_threads(phi, chk_thr, phi_thr))
 		return (EXIT_FAILURE);

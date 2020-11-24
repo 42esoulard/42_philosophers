@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 19:54:47 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 10:26:42 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,27 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
-int			init_tabs(t_phi **phi, pthread_mutex_t **mutex)
+int			init_tabs(t_phi **phi, pthread_mutex_t **fk_mx,
+	pthread_mutex_t **eat_mx)
 {
 	int				i;
-	pthread_mutex_t	*wr_mutex;
+	pthread_mutex_t	*wr_mx;
 
 	*((*phi)[0].end) = 0;
-	if (!(wr_mutex = malloc(sizeof(pthread_mutex_t)))
-		|| pthread_mutex_init(wr_mutex, NULL) != 0)
+	if (!(wr_mx = malloc(sizeof(pthread_mutex_t)))
+		|| pthread_mutex_init(wr_mx, NULL) != 0)
 		return (EXIT_FAILURE);
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
-		if (pthread_mutex_init(&((*mutex)[i]), NULL) != 0)
+		if (pthread_mutex_init(&((*fk_mx)[i]), NULL) != 0)
 			return (EXIT_FAILURE);
-		(*phi)[i].mutex = mutex;
+		if (pthread_mutex_init(&((*eat_mx)[i]), NULL) != 0)
+			return (EXIT_FAILURE);
+		(*phi)[i].fk_mx = fk_mx;
 		(*phi)[i].end = (*phi)[0].end;
-		(*phi)[i].wr_mutex = wr_mutex;
+		(*phi)[i].wr_mx = wr_mx;
+		(*phi)[i].eat_mx = &((*eat_mx)[i]);
 	}
 	return (EXIT_SUCCESS);
 }

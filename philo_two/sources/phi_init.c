@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 20:21:55 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 10:26:06 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,33 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	return (EXIT_SUCCESS);
 }
 
+char		*sem_name(char *src, int idx)
+{
+	int		i;
+	char	*tmp;
+	char	*itoa_idx;
+
+	if (!(tmp = malloc(sizeof(char) * 8)))
+		return (NULL);
+	i = -1;
+	while (src[++i])
+		tmp[i] = src[i];
+	if (!(itoa_idx = ft_itoa(idx)))
+		return (NULL);
+	idx = 0;
+	while (itoa_idx[idx])
+		tmp[i++] = itoa_idx[idx++];
+	tmp[i] = '\0';
+	free(itoa_idx);
+	return (tmp);
+}
+
 int			init_tabs(t_phi **phi, sem_t **forks, sem_t **wr)
 {
-	int				i;
+	int		i;
+	char	*tmp;
 
 	sem_unlink("/forks");
-	sem_unlink("/fkct");
 	sem_unlink("/write");
 	if (((*forks = sem_open("/forks", O_CREAT, 0644,
 		(*phi)[0].total)) == SEM_FAILED) || ((*wr =
@@ -95,6 +116,11 @@ int			init_tabs(t_phi **phi, sem_t **forks, sem_t **wr)
 	i = -1;
 	while (++i < (*phi)[0].total)
 	{
+		if (!(tmp = sem_name("/eat", i)))
+			return (EXIT_FAILURE);
+		sem_unlink(tmp);
+		(*phi)[i].eat_sem = sem_open(tmp, O_CREAT, 0644, 1);
+		free(tmp);
 		(*phi)[i].forks_sem = forks;
 		(*phi)[i].wr_sem = wr;
 		(*phi)[i].end = (*phi)[0].end;

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/14 12:07:53 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 20:25:39 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 17:39:05 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,14 @@ int		go_eat(t_phi **tmp)
 		if (grab_forks(*tmp))
 			return (EXIT_FAILURE);
 		if (update_last_meal(tmp) || is_dead(tmp) ||
+			sem_wait((*tmp)->eat_sem) ||
 			action_msg((*tmp), "is eating") ||
 			nap_time(*tmp, forecast((*tmp), (*tmp)->t_eat)))
 			ret = EXIT_FAILURE;
 		++((*tmp)->ct_meals);
 		if (sem_post((*(*tmp)->forks_sem)) ||
-			sem_post((*(*tmp)->forks_sem)))
+			sem_post((*(*tmp)->forks_sem)) ||
+			sem_post((*tmp)->eat_sem))
 			return (EXIT_FAILURE);
 		if (usleep(50) < 0)
 			return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 19:55:26 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 16:02:54 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,19 @@ int		free_all(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 {
 	int	i;
 
-	pthread_mutex_destroy(phi[0].wr_mutex);
-	free(phi[0].wr_mutex);
+	pthread_mutex_destroy(phi[0].wr_mx);
+	free(phi[0].wr_mx);
 	free(phi[0].end);
 	free(p_thr);
 	free(c_thr);
 	i = -1;
 	while (++i < phi[0].total)
-		pthread_mutex_destroy(&((*(phi[0].mutex))[i]));
-	free(*(phi[0].mutex));
+	{
+		pthread_mutex_destroy(&((phi[0].eat_mx)[i]));
+		pthread_mutex_destroy(&((*(phi[0].fk_mx))[i]));
+	}
+	free(phi[0].eat_mx);
+	free(*(phi[0].fk_mx));
 	free_phi(phi);
 	return (0);
 }

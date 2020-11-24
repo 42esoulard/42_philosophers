@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 19:55:01 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 10:27:28 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@
 # define PARAM_NB_MEAL "[number_of_time_each_philosophers_must_eat]"
 # define PARAM_NB_PHI "<number_of_philosopher>"
 
-# define AVAIL 0
-# define NOT_AVAIL 1
-
 # define EATS 0
 # define SLEEPS 1
 # define THINKS 2
@@ -43,9 +40,9 @@ typedef struct		s_phi
 	long int		t_sleep;
 	int				nb_meals;
 	int				ct_meals;
-	pthread_mutex_t	**mutex;
-	pthread_mutex_t *wr_mutex;
-	int				*wr_check;
+	pthread_mutex_t	**fk_mx;
+	pthread_mutex_t *wr_mx;
+	pthread_mutex_t *eat_mx;
 	int				*end;
 	int				fork_a;
 	int				fork_b;
@@ -57,7 +54,8 @@ typedef struct		s_phi
 }					t_phi;
 
 int					init_phi(int ac, char **av, t_phi **phi);
-int					init_tabs(t_phi **phi, pthread_mutex_t **mutex);
+int					init_tabs(t_phi **phi, pthread_mutex_t **fk_mx,
+	pthread_mutex_t **eat_mx);
 int					ft_init_err(char *stra, char *strb, t_phi **phi);
 
 void				*handle_phi(void *phi);

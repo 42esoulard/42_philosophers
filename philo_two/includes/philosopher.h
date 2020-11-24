@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:54 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/22 20:23:56 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 10:10:38 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@
 # define PARAM_NB_MEAL "[number_of_time_each_philosophers_must_eat]"
 # define PARAM_NB_PHI "<number_of_philosopher>"
 
-# define AVAIL 0
-# define NOT_AVAIL 1
-
 # define EATS 0
 # define SLEEPS 1
 # define THINKS 2
@@ -46,6 +43,7 @@ typedef struct		s_phi
 	int				nb_meals;
 	int				ct_meals;
 	sem_t			**forks_sem;
+	sem_t			*eat_sem;
 	sem_t			**wr_sem;
 	int				*end;
 	struct timeval	tv;

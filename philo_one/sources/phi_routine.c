@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/21 13:33:26 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/23 16:12:32 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,14 @@ long long	get_time(t_phi *phi)
 
 int			is_dead(t_phi **phi)
 {
+	if (pthread_mutex_lock(((*phi)->eat_mx)) != 0)
+		return (EXIT_FAILURE);
 	if (*((*phi)->end) == DEAD || (((*phi)->nb_meals) != -1 &&
 		((*phi)->ct_meals) >= ((*phi)->nb_meals)))
+	{
+		pthread_mutex_unlock(((*phi)->eat_mx));
 		return (2);
+	}
 	if (get_time(*phi) < 0)
 		return (EXIT_FAILURE);
 	if (((*phi)->time - (*phi)->last_meal)
@@ -58,8 +63,11 @@ int			is_dead(t_phi **phi)
 		if (*((*phi)->end) != DEAD && action_msg(*phi, "died"))
 			return (EXIT_FAILURE);
 		*((*phi)->end) = DEAD;
+		pthread_mutex_unlock(((*phi)->eat_mx));
 		return (2);
 	}
+	if (pthread_mutex_unlock(((*phi)->eat_mx)) != 0)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
