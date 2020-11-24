@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/24 10:00:08 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/24 16:57:58 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int			handle_phi(void *phi)
 		{
 			if (action_msg(tmp, "is sleeping") ||
 				nap_time(phi, forecast(tmp, tmp->t_sleep)) ||
-				action_msg(tmp, "is thinking"))
+				is_dead(&tmp) || action_msg(tmp, "is thinking"))
 				exit(EXIT_FAILURE);
 			tmp->status = EATS;
 		}
