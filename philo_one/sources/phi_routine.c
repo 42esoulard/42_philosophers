@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:56:21 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 11:06:02 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 11:30:36 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ long long	get_time(t_phi *phi)
 	phi->time = phi->tv.tv_sec * 1000 + phi->tv.tv_usec / 1000;
 	return (phi->time);
 }
-#include <stdio.h>
+
 int			is_dead(t_phi **phi)
 {
 	if (pthread_mutex_lock(((*phi)->eat_mx)) != 0)

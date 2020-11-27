@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 11:23:05 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 11:30:24 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ int		free_all(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 	free(phi[0].eat_mx);
 	free(*(phi[0].fk_mx));
 	free_phi(phi);
-	system("leaks ./philo_one");
 	return (0);
 }

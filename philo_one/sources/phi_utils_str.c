@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 14:54:04 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 11:25:13 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 11:30:49 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*phi_strjoin(char *time, char *index, char *action)
 	free_strs(time, index, NULL);
 	return (to_print);
 }
-#include <stdio.h>
+
 int			action_msg(t_phi *phi, char *action)
 {
 	char	*time;
@@ -87,6 +87,5 @@ int			action_msg(t_phi *phi, char *action)
 	free(to_print);
 	if (pthread_mutex_unlock((phi->wr_mx)) != 0)
 		return (EXIT_FAILURE);
-	// printf("out str\n");
 	return (EXIT_SUCCESS);
 }
