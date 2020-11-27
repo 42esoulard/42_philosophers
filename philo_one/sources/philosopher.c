@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/23 17:01:15 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 11:25:00 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ int		join_threads(t_phi *phi, pthread_t *chk_thr, pthread_t *phi_thr)
 
 	i = -1;
 	while (++i < phi[0].total)
+	{
 		if (pthread_join(chk_thr[i], NULL))
 			return (EXIT_FAILURE);
-	i = -1;
-	while (++i < phi[0].total)
-		if (pthread_join(phi_thr[i], NULL))
+		if (pthread_detach(phi_thr[i]))
 			return (EXIT_FAILURE);
+	}
 	return (free_all(phi, chk_thr, phi_thr));
 }
 
