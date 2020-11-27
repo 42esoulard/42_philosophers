@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:53:05 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/24 10:08:06 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 13:20:24 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int		free_all(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 	i = -1;
 	while (++i < phi[0].total)
 		sem_close(phi[i].eat_sem);
+	if (phi[0].total == 1)
+		sem_post(phi[0].forks_sem[0]);
 	sem_close(*(phi[0].forks_sem));
 	sem_close(*(phi[0].wr_sem));
 	free(phi[0].end);
