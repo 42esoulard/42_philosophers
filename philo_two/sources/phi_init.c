@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 12:08:35 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 12:20:53 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	total = 0;
 	if (ac != 5 && ac != 6)
 		return (ft_init_err("Wrong number of parameters!\n", NULL, NULL));
-	if ((total = ft_atoi(av[1])) == -1 <= 0)
+	if ((total = ft_atoi(av[1])) <= 0)
 		return (ft_init_err(av[1], PARAM_NB_PHI, NULL));
 	if (!(*phi = (t_phi *)malloc(sizeof(t_phi) * total)))
 		return (EXIT_FAILURE);
