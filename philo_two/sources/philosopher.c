@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 11:29:38 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/24 10:12:10 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 11:37:16 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int		launch_threads(t_phi *phi, pthread_t *c_thr, pthread_t *p_thr)
 			return (EXIT_FAILURE);
 		if (pthread_create(&c_thr[i], NULL, (void *)chk_death, &phi[i]))
 			return (EXIT_FAILURE);
+		if (pthread_detach(p_thr[i]))
+			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -50,10 +52,6 @@ int		join_threads(t_phi *phi, pthread_t *chk_thr, pthread_t *phi_thr)
 	i = -1;
 	while (++i < phi[0].total)
 		if (pthread_join(chk_thr[i], NULL))
-			return (EXIT_FAILURE);
-	i = -1;
-	while (++i < phi[0].total)
-		if (pthread_join(phi_thr[i], NULL))
 			return (EXIT_FAILURE);
 	return (free_all(phi, chk_thr, phi_thr));
 }
