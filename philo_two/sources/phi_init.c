@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 11:37:27 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 12:08:35 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ int			init_phi(int ac, char **av, t_phi **phi)
 	total = 0;
 	if (ac != 5 && ac != 6)
 		return (ft_init_err("Wrong number of parameters!\n", NULL, NULL));
-	if ((total = ft_atoi(av[1])) == -1 || total <= 0)
+	if ((total = ft_atoi(av[1])) == -1 <= 0)
 		return (ft_init_err(av[1], PARAM_NB_PHI, NULL));
 	if (!(*phi = (t_phi *)malloc(sizeof(t_phi) * total)))
 		return (EXIT_FAILURE);
-	if ((((*phi)[0]).t_die = ft_atoi(av[2])) == -1)
+	if ((((*phi)[0]).t_die = ft_atoi(av[2])) <= 0)
 		return (ft_init_err(av[2], PARAM_TDIE, phi));
-	if (((*phi)[0].t_eat = ft_atoi(av[3])) == -1)
+	if (((*phi)[0].t_eat = ft_atoi(av[3])) <= 0)
 		return (ft_init_err(av[3], PARAM_TEAT, phi));
-	if (((*phi)[0].t_sleep = ft_atoi(av[4])) == -1)
+	if (((*phi)[0].t_sleep = ft_atoi(av[4])) <= 0)
 		return (ft_init_err(av[4], PARAM_TSLEEP, phi));
 	if (((*phi)[0].tmp = -1) == -1 && ac == 6)
 	{
