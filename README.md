@@ -1,7 +1,8 @@
 # 42_philosophers
-Handling shared memory usage by multiple threads and processes with the classic Dining Philosophers Problem.=
+Handling shared memory usage by multiple threads and processes with the classic Dining Philosophers Problem.
 
 ./philoNB number_of_philosophers time_to_die time_to_eat time_to_sleep number_of_times_each_philosopher_must_eat(option)
+
 (times are given in milliseconds)
 
 **COMMON RULES:**
