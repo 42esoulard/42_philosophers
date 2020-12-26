@@ -6,7 +6,7 @@
 /*   By: esoulard <esoulard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 15:20:52 by esoulard          #+#    #+#             */
-/*   Updated: 2020/11/27 12:07:43 by esoulard         ###   ########.fr       */
+/*   Updated: 2020/11/27 18:16:25 by esoulard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int			init_phi(int ac, char **av, t_phi **phi)
 		return (ft_init_err(av[4], PARAM_TSLEEP, phi));
 	if (((*phi)[0].tmp = -1) == -1 && ac == 6)
 	{
-		if (((*phi)[0].nb_meals = ft_atoi(av[5])) == -1)
+		if (((*phi)[0].nb_meals = ft_atoi(av[5])) < 0)
 			return (ft_init_err(av[5], PARAM_NB_MEAL, phi));
 	}
 	else
