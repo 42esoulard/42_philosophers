@@ -31,4 +31,5 @@ Handling shared memory usage by multiple threads and processes with the classic 
   - Each philosopher should be a process and the main process shouldn't be a philosopher.
 
 
+
 Written in november 2020.
